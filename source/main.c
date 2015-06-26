@@ -1,4 +1,4 @@
-#include "HT45F67.h"
+#include "common.h"
 
 void main()
 {

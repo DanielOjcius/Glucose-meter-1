@@ -3,30 +3,66 @@
 //  Copyright : 2015 BY HOLTEK SEMICONDUCTOR INC
 //  File Name : sys_init.h
 // Description: 系統初始化相關程序
-//Targer Board: HT45F75 BodyFat-ESK00
-//   MCU      : HT45F75
+//Targer Board: HT45F6x
+//   MCU      : HT45F6x
 //   Author   : ChenTing
-//   Date     : 2015/05/26
-//   Version  : V00
-//   History  :
+//   Date     : 2015/06/26
 //___________________________________________________________________
 //___________________________________________________________________
 #ifndef SYS_INIT_H_
 #define SYS_INIT_H_
-
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 共用函數 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 void fun_PowerOnInit();
 void fun_ResetInit();
-void fun_GPIO();
+void fun_GPIOInit();
 void fun_RamInit();
 void fun_SysInit();
 void fun_PrepareToHalt();
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 中斷地址 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//中斷入口地址
+#define	START_VECTOR			0x000		// 主程序
+#define INT0_VECTOR				0x004		// Intrrupt 0
+#define INT1_VECTOR				0x008		// Intrrupt 1
+#define ADC_VECTOR				0x00C		// ADC
+// Multi Function Interrupts 0
+#define Multi0__VECTOR			0x010		// 復合中斷0
+#define Timer0A_VECTOR			0x010		// timer0 A
+#define Timer0P_VECTOR			0x010		// timer0 P
+#define Timer1A_VECTOR			0x010		// timer1 A
+#define Timer1P_VECTOR			0x010		// timer1 P
+// Multi Function Interrupts 1
+#define Multi1__VECTOR			0x014		// 復合中斷1
+#define LVD_VECTOR				0x014		// LVD
+#define SPI1_VECTOR				0x014		// SPI1
+#define UART_VECTOR				0x014		// UART
+// Multi Function Interrupts 2
+#define Multi2__VECTOR			0x018		// 復合中斷2
+#define SIM_SPI_VECTOR			0x018		// SIM SPI
+#define SIM_IIC_VECTOR			0x018		// SIM IIC
+#define PINTB_VECTOR			0x018		// PINTB
+#define Timer2P_VECTOR			0x018		// timer2 P
+#define Timer2A_VECTOR			0x018		// timer2 A
 
-//					@---------------IAP config---------------@
+#define Timebase0_VECTOR		0x01C		// timebase0
+#define Timebase1_VECTOR		0x020		// timebase1
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RAM Bank @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#ifdef HT45F65
+	//設置初始化 rambank 個數
+	#define RamBankSectorSum	3
+#endif
+#ifdef HT45F66
+	//設置初始化 rambank 個數
+	#define RamBankSectorSum	5
+#endif
+#ifdef HT45F67
+	//設置初始化 rambank 個數
+	#define RamBankSectorSum	5
+#endif
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ IAP @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //Setting in IAP.h
-//					@-------------WDT config--------------@
-//___________________________________________________________________
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ WDT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //Please in Option select WDT clock Source
 //if WDT clock Source fs =fsub
 //WDT time计算方式:
@@ -43,8 +79,7 @@ void fun_PrepareToHalt();
 #define WDTtime2_17				0B01010110	//2^17/Fs
 #define WDTtime2_18				0B01010111	//2^18/Fs
 #define WDT_Function_Default	WDTtime2_18
-
-//					@-------------LVR config--------------@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LVR @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
 //  ______________________________________________________________________________
@@ -56,22 +91,14 @@ void fun_PrepareToHalt();
 // 			01010101:  2.1V     00110011:  2.55V
 //			10011001:  3.15V    10101010:  3.8V
 //          其他值: MCU復位
-//___________________________________________________________________
 #define LVR_Voltage2_1			0B01010101
 #define LVR_Voltage2_55			0B00110011
 #define LVR_Voltage3_15			0B10011001
 #define LVR_Voltage3_8			0B10101010
 #define LVR_Voltage_Default		LVR_Voltage2_1	//POR=2.1V
-
-
-//					@-------------EEPROM config--------------@
-//Setting in EEPROM.h
-
 //					@-------------IO config--------------@
 //Setting in Target.h
-
-//					@-------------Timer config-----------@
-//Setting in Timer.h
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Timer @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //                           @--------------TMnC0---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |

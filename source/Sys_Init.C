@@ -7,8 +7,6 @@
 //   MCU      : HT45F75
 //   Author   : ChenTing
 //   Date     : 2015/05/26
-//   Version  : V00
-//   History  :
 //___________________________________________________________________
 //___________________________________________________________________
 #include "common.h"
@@ -23,7 +21,7 @@ NOTE	:
 void fun_ResetInit()
 {
 	//IO
-	fun_GPIO();
+	fun_GPIOInit();
 
 
 }
@@ -36,22 +34,16 @@ NOTE	:
 void fun_PowerOnInit()
 {
 //IAP not need	to init
-//EEPROM not need to init
-	//RAM
+//RAM
 	fun_RamInit();
-	//Sys Clock
-//	#if ((SysFrequency == 4000000)|(SysFrequency == 8000000) | (SysFrequency == 1200000))
-//		_smod = 0x03;	//SysFrequnency = fH
-//	#endif
-//	#if ((SysFrequency == 4000000)|(SysFrequency == 8000000) | (SysFrequency == 12000000))
-//		_smod = 0x03;	//SysFrequnency = fH
-//	#endif
-	//WDT
+//Sys Clock
+	_smod0 = 0x03;		// Fsys = Fh
+//IO
+	fun_GPIOInit();
+//WDT
 	_wdtc = WDT_Function_Default;
-	//LVR
+//LVR
 	_lvrc = LVR_Voltage_Default;
-	//IO
-	fun_GPIO();
 //Timer0
 	_t0on  = 0;
 	_tm0c0 = TM0C0_Default;
@@ -83,7 +75,7 @@ NOTE	:
 void fun_PrepareToHalt()
 {
 
-	fun_GPIO();
+	fun_GPIOInit();
 	//關閉ADC及LDO,VCM等
 //	fun_ADCStop();
 	//關閉 timer
@@ -124,7 +116,7 @@ INPUT	: none
 OUTPUT	: none
 NOTE	: 所有IO config為輸出low
 ********************************************************************/
-void fun_GPIO()
+void fun_GPIOInit()
 {
 	//PA PORT
 	_pac = 0x00;
@@ -143,11 +135,57 @@ void fun_GPIO()
 	_pdc = 0x00;
 	_pd  = 0x00;
 	_pdpu= 0xff;
-#ifdef HT45F77
 	//PE PORT
 	_pec = 0x00;
 	_pe  = 0x00;
 	_pepu= 0xff;
+#ifndef HT45F65
+	//PF PORT
+	_pfc = 0x00;
+	_pf  = 0x00;
+	_pfpu= 0xff;
+	//PG PORT
+	_pgc = 0x00;
+	_pg  = 0x00;
+	_pgpu= 0xff;
+	//PH PORT
+	_phc = 0x00;
+	_ph  = 0x00;
+	_phpu= 0xff;
+#endif
+// 引腳轉移
+#ifdef HT45F65
+	_pafs = PAFS_Default;
+	_pbfs = PBFS_Default;
+	_pcfs = PCFS_Default;
+	_pdfs0= PDFS0_Default;
+	_pdfs1= PDFS1_Default;
+	_pefs0= PEFS0_Default;
+	_pefs1= PEFS1_Default;
+#endif
+#ifdef HT45F66
+	_pafs = PAFS_Default;
+	_pbfs = PBFS_Default;
+	_pcfs = PCFS_Default;
+	_pdfs = PDFS_Default;
+	_pefs = PEFS_Default;
+	_pffs = PFFS_Default;
+	_pgfs = PGFS_Default;
+	_phfs = PHFS_Default;
+	_sfs0 = SFS0_Default;
+	_sfs1 = SFS1_Default;
+#endif
+#ifdef HT45F67
+	_pafs = PAFS_Default;
+	_pbfs = PBFS_Default;
+	_pcfs = PCFS_Default;
+	_pdfs = PDFS_Default;
+	_pefs = PEFS_Default;
+	_pffs = PFFS_Default;
+	_pgfs = PGFS_Default;
+	_phfs = PHFS_Default;
+	_sfs0 = SFS0_Default;
+	_sfs1 = SFS1_Default;
 #endif
 }
 /********************************************************************
@@ -159,16 +197,16 @@ NOTE	:HT45F75 無BANK1,BANK1為LCD顯示區域
 ********************************************************************/
 void fun_RamInit()
 {
-//	_mp1h = 0;
-//	_mp1l = 0x80;
-//	while(_mp1h <RamBankSectorSum)
-//	{
-//		for(_tblp = 0x00;_tblp < 128;_tblp++)
-//		{
-//			 _iar1 = 0;
-//			  _mp1l++;
-//		}
-//		_mp1l = 0x80;
-//		_mp1h++;
-//	}
+	_bp &= 0b11100000;
+	_mp1 = 0x80;
+	while((_bp &0b00011111) <=RamBankSectorSum)
+	{
+		for(_tblp = 0x00;_tblp < 128;_tblp++)
+		{
+			 _iar1 = 0;
+			  _mp1++;
+		}
+		_mp1 = 0x80;
+		_bp++;
+	}
 }

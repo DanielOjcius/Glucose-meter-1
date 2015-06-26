@@ -1,18 +1,16 @@
 //___________________________________________________________________
 //___________________________________________________________________
 //  Copyright : 2015 BY HOLTEK SEMICONDUCTOR INC
-//  File Name : HT45F6x-Config.c
-// Description: HT45F6x 暫存器快速設定
+//  File Name : IAP.h
+// Description: IAP相關設定及函數
 //Targer Board: None
 //   MCU      : HT45F6x
 //   Author   : ChenTing
 //   Date     : 2015/06/26
 //___________________________________________________________________
 //___________________________________________________________________
-#ifndef _MCUCONFIG_H_
-#define _MCUCONFIG_H_
-
-
+#ifndef IAP_H_
+#define IAP_H_
 
 
 

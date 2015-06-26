@@ -6,22 +6,18 @@
 //Targer Board:
 //   MCU      : HT45F75/HT45F77
 //   Author   : ChenTing
-//   Date     : 2015/06/02
-//   Version  : V00
-//   History  :
+//   Date     : 2015/06/26
 //___________________________________________________________________
 //___________________________________________________________________
 #ifndef _USERDEFINE_H_
 #define _USERDEFINE_H_
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@ 系統基礎設定 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-// 支持HT45F75 和 HT45F77
-#define HT45F75			// LED顯示
-// #define HT45F77      // LCD顯示
-
-//  可選頻率有
-//  HIRC : 4800000,9600000，1440000
-//  HXT  : 4000000,8000000，120000
+// 支持 HT45F65,HT45F66,HT45F67
+#define HT45F67
+//  可選頻率有 4000000,8000000，12000000
+//  可選時鐘來源有 HIRC,HXT
+#define HIRC
 #define SysFrequency	4800000
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@ SPI/IIC選擇 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 // 選擇SIM的功能,SIM中的SPI和IIC由於引腳和暫存器共用,因此只能選擇其中一個功能
@@ -51,26 +47,6 @@
 #define WeighLockThreshold			20 	// 重量鎖定允許變化的範圍
 #define ImpedanceLockThreshold		10  // 阻抗鎖定允許變化的範圍
 #define AutoWeighThreshold			50  // 自動上稱重量閥值
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//                        重量校準參數
-// 第一次為進行校準時設定的初始校準值
-//#define CalData0Kg_Default			2915  	//
-//#define CalData50Kg_Default			4140   // 7055
-//#define CalData100Kg_Default		4185   // 11240
-//#define CalData150Kg_Default		4173   //15413
-#define CalData0Kg_Default			35703  	//
-#define CalData50Kg_Default			4136   // 7055
-#define CalData100Kg_Default		3342   // 11240
-#define CalData150Kg_Default		5020   //15413
-// 校準值存放在EEPROM的對應地址
-#define EEPROMAddrCal_000KgLow		0x01
-#define EEPROMAddrCal_000KgHigh		0x02
-#define EEPROMAddrCal_050KgLow		0x03
-#define EEPROMAddrCal_050KgHigh		0x04
-#define EEPROMAddrCal_100KgLow		0x05
-#define EEPROMAddrCal_100KgHigh		0x06
-#define EEPROMAddrCal_150KgLow		0x07
-#define EEPROMAddrCal_150KgHigh		0x08
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 

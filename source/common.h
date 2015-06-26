@@ -9,6 +9,7 @@
 #include "project.h"
 
 #include "Sys_Init.h"
+#include "Target.h"
 #include "readme.h"
 
 #endif
