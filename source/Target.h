@@ -30,7 +30,7 @@
 // 			0:  I/O
 //			1:  OP1N(HT45F65)  未使用(HT45F66/HT45F67)
 // BIT 4~0  未使用:讀為 0
-#define PAFS_Default	0B01000000	//INT0
+#define PAFS_Default	0B01000000	//INT0 for RX Audio
 //                           @--------------PBFS---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -283,7 +283,7 @@
 // BIT 0  PFFS0:PF0
 // 			0:  I/O
 //			1:  SEG16
-#define PFFS_Default	0B00000000
+#define PFFS_Default	0B11111111
 //                           @--------------PGFS for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |

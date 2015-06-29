@@ -18,10 +18,10 @@
 // 可直接開啟對應的屏蔽項coding(需要屏蔽Multin_ISR(n=0,1,2))
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ INT0 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-DEFINE_ISR(INT0_ISR, INT0_VECTOR)
-{
+// DEFINE_ISR(INT0_ISR, INT0_VECTOR)
+// {
 
-}
+// }  for hijack RX
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ INT1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 DEFINE_ISR(INT1_ISR, INT1_VECTOR)
 {

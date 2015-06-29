@@ -99,6 +99,9 @@ void fun_PrepareToHalt();
 //					@-------------IO config--------------@
 //Setting in Target.h
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Timer @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//                 TM0         TM1         TM2           TM3
+// HT45F65      CTM-10bits  CTM-10bits  STM-16bits        -
+// HT45F66/67   CTM-10bits  ETM-10bits  STM-16bits   CTM-10bits
 //                           @--------------TMnC0---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -112,16 +115,22 @@ void fun_PrepareToHalt();
 //			1:  暫停
 // BIT 6~4  TnCK2~TnCK0:選擇TMn計數時鐘
 // 			000:  fsys/4   001:  fsys   010:   fh/16
-// 			011:  fh/64    100:  fsub   101:   保留位
+// 			011:  fh/64    100:  ftbc   101:   保留位
 // 			110:  TCKn上升沿    111:  TCKn下降沿
 // BIT 3  TnON:TMn計數器on/off控制位
 // 			0:  off
 //			1:  on
-// BIT 2~0 TnRP2~TnRP0:TMn CCRP 3bit寄存器，與TMn計數器bit9~bit7比較器P匹配週期	/時鐘週期
+// BIT 2~0:
+// @CTM/ETM(TM0,TM1,TM3)
+//	    TnRP2~TnRP0:TMn CCRP 3bit寄存器，與TMn計數器bit9~bit7比較器P匹配週期/時鐘週期
 // 			000:  1024   001:  128   010:   256
 // 			011:  384    100:  512   101:   640
 // 			110:  768    111:  896
-#define TM0C0_Default		0x30   // CLOCK  fsys/64
+// @STM/(TM2)    未定義
+#define TM0C0_Default		0x00
+#define TM1C0_Default		0x00
+#define TM2C0_Default		0x00
+#define TM3C0_Default		0x00
 //                           @--------------TMnC1---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -131,16 +140,20 @@ void fun_PrepareToHalt();
 // | POR  |   0    |   0    |   0    |   0    |   0    |   0    |   0    |   0    |
 // |_______________________________________________________________________________
 // BIT 7~6  TnM1~TnM0:選擇TMn工作模式位
-// 			00:  比較器匹配輸出模式   01:未定義模式
-//			10:  PWM模式              11:定時/計數器模式
+// 		00:  比較器匹配輸出模式   							  01:未定義模式(CTM)  輸入捕捉模式(STM)
+//		10:  PWM模式(CTM)  PWM模式/單脈衝輸出模式(STM&ETM)    11:定時/計數器模式
 // BIT 5~4  TnIO1~TnIO0:選擇TPn_0，TPn_1輸出功能位
 //比較匹配輸出模式
 // 			00:  無變化          01:  輸出低
 //			10:  輸出高          11:  輸出翻轉
 //PWM模式
 // 			00:  強制無效狀態    01:  強制有效狀態
-//			10:  PWM輸出         11:  未定義
+//			10:  PWM輸出         11:  未定義(CTM)  單脈衝輸出(STM)
+//輸入捕捉模式:(STM)
+//			00:在TPn_0,TPn_1上升沿輸入捕捉		01:在TPn_0,TPn_1下升沿輸入捕捉
+//			10:在TPn_0,TPn_1雙沿輸入捕捉		11:輸入捕捉除能
 //計數器/定時模式: 未定義
+//
 // BIT 3  TnOC
 // 比較匹配輸出模式             PWM模式
 // 			0:  初始低             0:  低有效
@@ -155,8 +168,103 @@ void fun_PrepareToHalt();
 // 			0:  TMn比較器P匹配
 //			1:  TMn比較器A匹配
 #define TM0C1_Default		0xC1
-#define TM0AL_Default		0x2C
-#define TM0AH_Default		0x01
+#define TM2C1_Default		0xC1
+#define TM3C1_Default		0xC1
+//                           @--------------TM1C1---------------@
+//  ______________________________________________________________________________
+// | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
+//  ______________________________________________________________________________
+// | Name |  T1AM1 |  T1AM0 | T1AIO1 | T1AIO0 |  T1AOC | T1APOL | T1CDN  | T1CCLR |
+// |______________________________________________________________________________
+// | POR  |   0    |   0    |   0    |   0    |   0    |   0    |   0    |   0    |
+// |_______________________________________________________________________________
+// BIT 7~6  T1AM1~T1AM0:選擇TM1 CCRA工作模式位
+//	 		00:  比較器匹配輸出模式   	   01:輸入捕捉模式
+//			10:  PWM模式/單脈衝輸出模式    11:定時/計數器模式
+// BIT 5~4  T1AIO1~T1AIO0:選擇TP1A輸出功能位
+//比較匹配輸出模式
+// 			00:  無變化          01:  輸出低
+//			10:  輸出高          11:  輸出翻轉
+//PWM模式
+// 			00:  強制無效狀態    01:  強制有效狀態
+//			10:  PWM輸出         11:  單脈衝輸出
+//輸入捕捉模式:(STM)
+//			00:在TP1A上升沿輸入捕捉		01:在TP1A下升沿輸入捕捉
+//			10:在TP1A雙沿輸入捕捉		11:輸入捕捉除能
+//計數器/定時模式: 未定義
+//
+// BIT 3  T1AOC
+// 比較匹配輸出模式             PWM模式
+// 			0:  初始低             0:  低有效
+//			1:  初始高             1:  高有效
+// BIT 2  T1APOL:TP1A輸出極性控制位
+// 			0:  同相
+//			1:  反相
+// BIT 1  T1CDN: TM1計數器向上/向下計數標誌位
+// 			0:  向上計數
+//			1:  向下計數
+// BIT 0  T1CCLR:選擇TM1計數器清零條件位
+// 			0:  TM1比較器P匹配
+//			1:  TM1比較器A匹配
+#define TM1C1_Default		0xC1 // only for ETM  TM1
+//                           @--------------TM1C2---------------@
+//  ______________________________________________________________________________
+// | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
+//  ______________________________________________________________________________
+// | Name |  T1BM1 |  T1BM0 | T1BIO1 | T1BIO0 |  T1BOC | T1BPOL | T1PWM1 | T1PWM0 |
+// |______________________________________________________________________________
+// | POR  |   0    |   0    |   0    |   0    |   0    |   0    |   0    |   0    |
+// |_______________________________________________________________________________
+// BIT 7~6  T1BM1~T1BM0:選擇TM1 CCRB工作模式位
+//	 		00:  比較器匹配輸出模式   	   01:輸入捕捉模式
+//			10:  PWM模式/單脈衝輸出模式    11:定時/計數器模式
+// BIT 5~4  T1BIO1~T1BIO0:選擇TP1A輸出功能位
+//比較匹配輸出模式
+// 			00:  無變化          01:  輸出低
+//			10:  輸出高          11:  輸出翻轉
+//PWM模式
+// 			00:  強制無效狀態    01:  強制有效狀態
+//			10:  PWM輸出         11:  單脈衝輸出
+//輸入捕捉模式:(STM)
+//			00:在TP1B_0.TP1B_1,TP1B_2上升沿輸入捕捉		01:在TP1B_0.TP1B_1,TP1B_2下升沿輸入捕捉
+//			10:在TP1B_0.TP1B_1,TP1B_2雙沿輸入捕捉		11:輸入捕捉除能
+//計數器/定時模式: 未定義
+//
+// BIT 3  T1BOC
+// 比較匹配輸出模式             PWM模式
+// 			0:  初始低             0:  低有效
+//			1:  初始高             1:  高有效
+// BIT 2  T1BPOL:TP1A輸出極性控制位
+// 			0:  同相
+//			1:  反相
+// BIT 1  T1PWM1~T1PWM0:選擇PWM模式位
+// 			00:  邊沿對齊          					01: 中心對齊,向上計數比較匹配
+//			10:  中心對齊,向下計數比較匹配          11:  中心對齊,向上/下計數比較匹配
+#define TM1C2_Default		0xC1 // only for ETM  TM1
+//                           @--------------TMnRP---------------@
+//  ______________________________________________________________________________
+// | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
+//  ______________________________________________________________________________
+// | Name |   D7   |   D6   |   D5   |   D4   |   D3   |   D2   |   D1   |   D0   |
+// |______________________________________________________________________________
+// | POR  |   0    |   0    |   0    |   0    |   0    |   0    |   0    |   0    |
+// |_______________________________________________________________________________
+// BIT 7~0  D7~D0:TMn CCRP高字節暫存器Bit7~Bit0
+//          TMn CCRP 8 位暫存器,與TMn計數器Bit15~bit8比較.比較器P匹配週期
+// 			0:  65536個TMn時鐘週期
+//			1~255: 256X(1~255)個TMn時鐘週期
+#define TM2RP_Default       0x00 	// only for STM TM2
+
+#define TM0AL_Default		0x00
+#define TM0AH_Default		0x00
+#define TM1AL_Default		0x00
+#define TM1AH_Default		0x00
+#define TM1BL_Default		0x00 	// only for  HT45F66/HT45F67 ETM
+#define TM1BH_Default		0x00    // only for  HT45F66/HT45F67 ETM
+#define TM2AL_Default		0x00
+#define TM2AH_Default		0x00
+#define TM3AL_Default		0x00
+#define TM3AH_Default		0x00
 //					@-------Internal Power config--------@
 //Setting in Others file  when need
 

@@ -9,6 +9,11 @@
 #include "project.h"
 
 #include "Sys_Init.h"
+#include "ADC.h"
+#include "IAP.h"
+#include "Voice.h"
+#include "LCD.h"
+#include "Hijack.h"
 #include "Target.h"
 #include "readme.h"
 
