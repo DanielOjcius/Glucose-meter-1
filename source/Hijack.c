@@ -24,7 +24,9 @@ void fun_HijcakSend(unsigned char lu8v_FisrtData,unsigned char lu8v_SecondData)
 {
 	Hijack_TX_IO = 0;
 	Hijack_TX    = 1;
-//建立Bias信號 12bit0
+	gbv_FirstEnter = 1;
+	lu8v_HijackCnt = 0;
+	lu8v_HijackTXState = HijackTX_Bias;
 }
 
 void fun_HijackBuildBias()
@@ -38,45 +40,57 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 }
 DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 {
-	if (gbv_firstBit)
+	if (gbv_FirstEnter)
 	{
-		gbv_firstBit = 0;
-		Hijack_TX = 1;
-		switch (lu8v_HijackTXState)
+		gbv_FirstEnter = 0;
+		if (gbv_DouleBit)
 		{
-			case HijackTX_Bias:
-				lu8v_HijackCnt++;
-				if (lu8v_HijackCnt > 12)
-				{
-					lu8v_HijackTXState = Hijack_TX_StartIdle;
-					lu8v_HijackCnt = 0;
-
+			Hijack_TX = 0;
+			gbv_DouleBit = 0;
+		}
+		else
+		{
+			Hijack_TX = 1;
+			switch (lu8v_HijackTXState)
+			{
+				//建立Bias信號 12bit 0
+				case HijackTX_Bias:
+					lu8v_HijackCnt++;
 					gbv_DouleBit   = 1;
-				}
-				break;
-			case Hijack_TX_StartIdle:
+					if (lu8v_HijackCnt > 12)
+					{
+						lu8v_HijackTXState = Hijack_TX_StartIdle;
+						lu8v_HijackCnt = 0;
 
-				break;
-			case Hijack_TX_StartBit:
-				break;
-			case Hijack_TX_FirstData:
-				break;
-			case Hijack_TX_SecondData:
-				break;
-			case Hijack_TX_ParityBit:
-				break;
-			case Hijack_TX_StopBit:
-				break;
-			case Hijack_TX_StopIdle:
-				break;
-			default:
-				break;
+					}
+					break;
+				case Hijack_TX_StartIdle:
+
+					break;
+				case Hijack_TX_StartBit:
+					break;
+				case Hijack_TX_FirstData:
+					break;
+				case Hijack_TX_SecondData:
+					break;
+				case Hijack_TX_ParityBit:
+					break;
+				case Hijack_TX_StopBit:
+					break;
+				case Hijack_TX_StopIdle:
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	else
 	{
-		gbv_firstBit = 1;
-		Hijack_TX = 0;
+		gbv_FirstEnter = 1;
+		if (gbv_DouleBit = 0)
+		{
+			Hijack_TX = 0;
+		}
 	}
 
 }
