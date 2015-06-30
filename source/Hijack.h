@@ -12,17 +12,29 @@
 #ifndef HIJACK_H_
 #define HIJACK_H_
 
-#define gbv_DoubleBit		gu8v_Flag0.bits.b0 		// 按鍵長按標誌位
-#define gbv_PowerOn			gu8v_Flag0.bits.b1 		// 第一次上電標誌位
-#define gbv_KeyPress		gu8v_Flag0.bits.b2		// 有鍵按下標誌位,進入按鍵Debounce
-#define gbv_FirstEnter		gu8v_Flag0.bits.b3		//
-#define gbv_ADDGetDataOK	gu8v_Flag0.bits.b4		// 得到一筆ADC值
-#define gbv_ADC_Locking		gu8v_Flag0.bits.b5  	// ADC值處於穩定狀態中,但還沒有鎖定,此時動態更新重量值
-#define gbv_7_8ms			gu8v_Flag0.bits.b6		// TimeBase0 7.8ms標誌位,用於按鍵偵測等動作
-#define gbv_LedPoint		gu8v_Flag0.bits.b7 		// 用於七段數碼管顯示小數點標誌位
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 公共函數 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+void fun_HijcakTxStart(unsigned char FisrtData,unsigned char SecondData);
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 變量聲明 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+extern volatile __byte_type 	gu8v_FlagTx; 			// Bit標誌位
+#define gbv_TxBitHigh			gu8v_FlagTx.bits.b0 		// 按鍵長按標誌位
+#define gbv_TxFirstEnter		gu8v_FlagTx.bits.b1			// 第一次進入Timer標誌位
+#define gbv_TxSecondEnter		gu8v_FlagTx.bits.b2			// 第二次進入Timer標誌位
+#define gbv_TxThirdEnter		gu8v_FlagTx.bits.b3  		// 第三次進入Timer標誌位
+#define gbv_TxFourthEnter		gu8v_FlagTx.bits.b4			// 第四次進入Timer標誌位
+#define gbv_TxDataOk			gu8v_FlagTx.bits.b5 		// Hijack發送完成標誌位
 
-#define HijackTX_Bias				1
+extern volatile __byte_type 	gu8v_FlagRx;				// Bit標誌位
+#define gbv_RxGetBitOk			gu8v_FlagRx.bits.b1 		// Hijack接收到一個bit
+#define gbv_RxDealBitOk			gu8v_FlagRx.bits.b2 		// Hijack接收到一個bit
+#define gbv_RxFirstEnter		gu8v_FlagRx.bits.b3			// 第一次進入Timer標誌位
+#define gbv_RxSecondEnter		gu8v_FlagRx.bits.b4			// 第二次進入Timer標誌位
+#define gbv_RxThirdEnter		gu8v_FlagRx.bits.b5  		// 第三次進入Timer標誌位
+#define gbv_RxBitHigh			gu8v_FlagRx.bits.b6 		// 按鍵長按標誌位
+#define gbv_RxError				gu8v_FlagRx.bits.b7 		// 按鍵長按標誌位
+
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 預定義  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#define Hijack_TX_Bias				1
 #define Hijack_TX_StartIdle			2
 #define Hijack_TX_StartBit			3
 #define Hijack_TX_FirstData			4
@@ -30,7 +42,15 @@
 #define Hijack_TX_ParityBit			6
 #define Hijack_TX_StopBit			7
 #define Hijack_TX_StopIdle			8
-
+#define Hijack_TX_OK				9
+#define Hijack_RX_Bias				1
+#define Hijack_RX_StartIdle			2
+#define Hijack_RX_StartBit			3
+#define Hijack_RX_FirstData			4
+#define Hijack_RX_SecondData		5
+#define Hijack_RX_ParityBit			6
+#define Hijack_RX_StopBit			7
+#define Hijack_RX_StopIdle			8
 
 #define Hijack_TX_IO 		_pac5
 #define Hijack_TX 	 		_pa5
@@ -42,7 +62,14 @@
 #define Hijack_Wakeup 	 	_pa6
 #define Hijack_ENVCC_IO 	_pac4
 #define Hijack_ENVCC    	_pa4
-#define fskFrequency0	1378
-#define fskFrequency1	fskFrequency0/2				//Fsk high的頻率為low的一半
+#define HijackFrequency0	1378
+#define HijackFrequency1	HijackFrequency0/2				//Fsk high的頻率為low的一半
+#define HiajackCnt0			1000000/HijackFrequency0/2
+#define HiajackCnt1			1000000/HijackFrequency1/2
+#define Tolerance			25
+#define hijack_Period0_Max	HiajackCnt0 + Tolerance
+#define hijack_Period0_Min	HiajackCnt0 - Tolerance
+#define hijack_Period1_Max	HiajackCnt1 + Tolerance
+#define hijack_Period1_Min	HiajackCnt1 - Tolerance
 
 #endif

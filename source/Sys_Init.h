@@ -20,12 +20,14 @@ void fun_RamInit();
 void fun_SysInit();
 void fun_PrepareToHalt();
 
+
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 中斷地址 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-//中斷入口地址
 #define	START_VECTOR			0x000		// 主程序
 #define INT0_VECTOR				0x004		// Intrrupt 0
 #define INT1_VECTOR				0x008		// Intrrupt 1
 #define ADC_VECTOR				0x00C		// ADC
+// HT45F65 中斷入口地址
+#ifdef HT45F65
 // Multi Function Interrupts 0
 #define Multi0__VECTOR			0x010		// 復合中斷0
 #define Timer0A_VECTOR			0x010		// timer0 A
@@ -47,6 +49,36 @@ void fun_PrepareToHalt();
 
 #define Timebase0_VECTOR		0x01C		// timebase0
 #define Timebase1_VECTOR		0x020		// timebase1
+#endif
+// HT45F66&HT45F67 中斷入口地址
+#ifndef HT45F65
+// Multi Function Interrupts 0
+#define Multi0__VECTOR			0x010		// 復合中斷0
+#define Timer0A_VECTOR			0x010		// timer0 A
+#define Timer0P_VECTOR			0x010		// timer0 P
+#define Timer2A_VECTOR			0x010		// timer2 A
+#define Timer2P_VECTOR			0x010		// timer2 P
+// Multi Function Interrupts 1
+#define Multi1__VECTOR			0x014		// 復合中斷1
+#define Timer1A_VECTOR			0x014		// timer1 A
+#define Timer1P_VECTOR			0x014		// timer1 P
+#define Timer1B_VECTOR			0x014		// timer1 B
+#define UART_VECTOR				0x014		// UART
+// Multi Function Interrupts 2
+#define Multi2__VECTOR			0x018		// 復合中斷2
+#define SIM_SPI_VECTOR			0x018		// SIM SPI
+#define SIM_IIC_VECTOR			0x018		// SIM IIC
+#define PINTB_VECTOR			0x018		// PINTB
+#define Timer3P_VECTOR			0x018		// timer2 P
+#define Timer3A_VECTOR			0x018		// timer2 A
+// Multi Function Interrupts 3
+#define Multi3__VECTOR			0x01C		// 復合中斷3
+#define LVD_VECTOR				0x01C		// LVD
+#define SPI1_VECTOR				0x01C		// SPI1
+
+#define Timebase0_VECTOR		0x020		// timebase0
+#define Timebase1_VECTOR		0x024		// timebase1
+#endif
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RAM Bank @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #ifdef HT45F65
 	//設置初始化 rambank 個數
@@ -167,9 +199,9 @@ void fun_PrepareToHalt();
 // BIT 0  TnCCLR:選擇TMn計數器清零條件位
 // 			0:  TMn比較器P匹配
 //			1:  TMn比較器A匹配
-#define TM0C1_Default		0xC1
+#define TM0C1_Default		0xC1	//定時模式,A匹配中斷
 #define TM2C1_Default		0xC1
-#define TM3C1_Default		0xC1
+#define TM3C1_Default		0xC1	//定時模式,A匹配中斷
 //                           @--------------TM1C1---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -254,17 +286,19 @@ void fun_PrepareToHalt();
 // 			0:  65536個TMn時鐘週期
 //			1~255: 256X(1~255)個TMn時鐘週期
 #define TM2RP_Default       0x00 	// only for STM TM2
+// for Hijack TX
+#define TM0AL_Default		HiajackCnt0%255
+#define TM0AH_Default		HiajackCnt0/255
 
-#define TM0AL_Default		0x00
-#define TM0AH_Default		0x00
 #define TM1AL_Default		0x00
 #define TM1AH_Default		0x00
 #define TM1BL_Default		0x00 	// only for  HT45F66/HT45F67 ETM
 #define TM1BH_Default		0x00    // only for  HT45F66/HT45F67 ETM
 #define TM2AL_Default		0x00
 #define TM2AH_Default		0x00
-#define TM3AL_Default		0x00
-#define TM3AH_Default		0x00
+// for Hijack RX
+#define TM3AL_Default		0xFF
+#define TM3AH_Default		0xFF
 //					@-------Internal Power config--------@
 //Setting in Others file  when need
 
@@ -296,15 +330,33 @@ void fun_PrepareToHalt();
 
 #define TimeBase_Default 	0B10110000	//TimeBase1 1S   TimeBase 0  7.8ms
 
-//					@------------ADC config--------------@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ADC @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //Setting in ADC.h
 
 //					@-------Temperature config-----------@
 //Setting in Others file  when need
 
-//					@-------------SIM config-------------@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SIM @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //Setting in SIM.h
 
-//					@-------------UART config-------------@
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ UART @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //Setting in UART.h
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ INTO @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+//                           @--------------INTEG---------------@
+//  ______________________________________________________________________________
+// | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
+//  ______________________________________________________________________________
+// | Name |   -    |   -    |   -    |   -    | INT1S1 | INT1S0 | INT0S1 | INT0S0 |
+// |______________________________________________________________________________
+// | POR  |   -    |   -    |   -    |   -    |   0    |   0    |   0    |   0    |
+// |_______________________________________________________________________________
+// BIT 7~4  未使用,讀為0
+// BIT 3~2  INT1S1,INT1S0:INT1腳中斷邊沿控制位
+// 			00:  除能     01:  上升沿
+//			10:  下降沿   11:  雙邊沿
+// BIT 1~0  INT1S1,INT1S0:INT0腳中斷邊沿控制位
+// 			00:  除能     01:  上升沿
+//			10:  下降沿   11:  雙邊沿
+#define INTEG_Default	0x03
+
 #endif

@@ -44,20 +44,28 @@ void fun_PowerOnInit()
 	_wdtc = WDT_Function_Default;
 //LVR
 	_lvrc = LVR_Voltage_Default;
-//Timer0
-	_t0on  = 0;
+//Timer0 for Hijack Tx é_†¢ÖÐ”à
 	_tm0c0 = TM0C0_Default;
 	_tm0c1 = TM0C1_Default;
 	_tm0al = TM0AL_Default;
 	_tm0ah = TM0AH_Default;
 	_mf0f  = 0;
 	_mf0e  = 1;
-//	_ta0f  = 0;
-//	_ta0e  = 1;
-	_t0on  = 1;
+	_t0ae  = 1;
+//Timer3 for Hijack Rx ²»é_†¢ÖÐ”à
+	_tm3c0 = TM0C0_Default;
+	_tm3c1 = TM0C1_Default;
+	_tm3al = TM0AL_Default;
+	_tm3ah = TM0AH_Default;
+	_mf2f  = 0;
+	_mf2e  = 0;
+	_t3ae  = 0;
 //Timer1
 //Timer2
-
+// INTO
+	_integ = INTEG_Default;
+	_int0f = 0;
+	_int0e = 1;
 	//TimeBase
 	_tbc  = TimeBase_Default;
 	_tb0f = 0;

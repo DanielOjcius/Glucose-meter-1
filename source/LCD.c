@@ -11,7 +11,7 @@
 //___________________________________________________________________
 #include "common.h"
 
-volatile unsigned char lu8v_LED_Buffer[5];
+volatile unsigned char lu8v_LED_Buffer[4];
 volatile static unsigned int lu8v_LCD_Buffer[8] __attribute__ ((at(0x190)));
 const unsigned char lu8v_LCD_HEX[18] =
  {0x3f,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x07,0x7F,0x6F, // 0~9
