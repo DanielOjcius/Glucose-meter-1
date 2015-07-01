@@ -200,8 +200,7 @@ void fun_GPIOInit()
 Function:Ram_Init
 INPUT	:
 OUTPUT	:
-NOTE	:HT45F75 üoBANK1,BANK1ûÈLCDÔ@ æÖ^”Ú
-		:HT45F77 ”–LCD,Ñt”–BANK1
+NOTE	:
 ********************************************************************/
 void fun_RamInit()
 {

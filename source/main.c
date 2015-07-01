@@ -46,6 +46,7 @@ void main()
 	while(1)
 	{
 		GCC_CLRWDT();
+		fun_HijackRx();
 		//是否到睡眠時間
 		if (gu8v_HaltTime > HaltTime_Default)
 		{
@@ -59,7 +60,7 @@ void main()
 			fun_LCDUpdate();
 			// 用戶的其他任務
 			// ---------
-			fun_HijcakTxStart(gu8v_TxDataHigh,gu8v_TxDataLow);
+			fun_HijcakTx(gu8v_TxDataHigh,gu8v_TxDataLow);
 		}
 		//輪詢各個工作模式
 		switch (WorkModeState)

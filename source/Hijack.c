@@ -12,14 +12,18 @@
 #include "common.h"
 
 volatile __byte_type 	gu8v_FlagTx; 			// Bit標誌位
-volatile __byte_type 	gu8v_FlagRx;			// Bit標誌位
 volatile unsigned char  lu8v_HijackTxState;		// Hijack發送狀態
-volatile unsigned char  lu8v_HijackRxState;		// Hijack發送狀態
 volatile unsigned char  lu8v_HijackTxCnt;		// Hijack發送狀態
+volatile unsigned char  lu8v_HijackTxParityCnt;	// Hijack發送狀態
+volatile unsigned char  gu8v_TxFisrtData;		// Hijack發送第一筆數據
+volatile unsigned char  gu8v_TxSecondData;		// Hijack發送第二筆數據
+
+volatile __byte_type 	gu8v_FlagRx;			// Bit標誌位
+volatile unsigned char  lu8v_HijackRxState;		// Hijack發送狀態
 volatile unsigned char  lu8v_HijackRxCnt;		// Hijack發送狀態
-volatile unsigned char  lu8v_HijackParityCnt;	// Hijack發送狀態
-volatile unsigned char  gu8v_FisrtData;			// Hijack發送第一筆數據
-volatile unsigned char  gu8v_SecondData;		// Hijack發送第二筆數據
+volatile unsigned char  lu8v_HijackRxParityCnt;	// Hijack發送狀態
+volatile unsigned char  gu8v_RxFisrtData;		// Hijack發送第一筆數據
+volatile unsigned char  gu8v_RxSecondData;		// Hijack發送第二筆數據
 
 volatile __16_type 		gu16_TimeCnt1;			// Hijack 接收週期
 volatile __16_type 		gu16_TimeCnt2;			// Hijack 接收週期
@@ -29,7 +33,7 @@ INPUT	:
 OUTPUT	:
 NOTE	:
 ********************************************************************/
-void fun_HijcakTxStart(unsigned char FisrtData,unsigned char SecondData)
+void fun_HijcakTx(unsigned char FisrtData,unsigned char SecondData)
 {
 	if (gbv_TxDataOk)
 	{
@@ -39,11 +43,36 @@ void fun_HijcakTxStart(unsigned char FisrtData,unsigned char SecondData)
 		gbv_TxFirstEnter = 1;
 		lu8v_HijackTxCnt = 0;
 		lu8v_HijackTxState = Hijack_TX_Bias;
-		gu8v_FisrtData = FisrtData;
-		gu8v_SecondData = SecondData;
+		gu8v_TxFisrtData = FisrtData;
+		gu8v_TxSecondData = SecondData;
 		// 開啟time 發送音頻信號
 		_t0on = 1;
 		_emi = 1;
+	}
+}
+void fun_HijackRx()
+{
+	if (gbv_RxDataOk)
+	{
+		gbv_RxDataOk = 0;
+		// TODO 更新數據到LCD
+
+		//回復到初始接收狀態
+		gbv_RxFirstEnter = 1;
+		gbv_RxSecondEnter =0;
+		gbv_RxThirdEnter =0;
+		lu8v_HijackRxCnt = 0;
+	}
+	else if (gbv_RxError)
+	{
+		gbv_RxError = 0;
+		// TODO 更新ERROR到LCD
+
+		// 回復到初始接收狀態
+		gbv_RxFirstEnter = 1;
+		gbv_RxSecondEnter =0;
+		gbv_RxThirdEnter =0;
+		lu8v_HijackRxCnt = 0;
 	}
 }
 /********************************************************************
@@ -152,6 +181,15 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 				if (lu8v_HijackRxCnt<8)
 				{
 					lu8v_HijackRxCnt++;
+					if (gbv_RxBitHigh == 1)
+					{
+						gu8v_RxFisrtData = (gu8v_RxFisrtData<<1) | 0x01;
+						lu8v_HijackRxParityCnt++;
+					}
+					else
+					{
+						gu8v_RxFisrtData = (gu8v_RxFisrtData<<1) | 0x00;
+					}
 					if (lu8v_HijackRxCnt == 8)
 					{
 						lu8v_HijackRxState = Hijack_RX_SecondData;
@@ -160,12 +198,60 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 				}
 				break;
 			case Hijack_RX_SecondData:
+				if (lu8v_HijackRxCnt<8)
+				{
+					lu8v_HijackRxCnt++;
+					if (gbv_RxBitHigh == 1)
+					{
+						gu8v_RxSecondData = (gu8v_RxSecondData<<1) | 0x01;
+						lu8v_HijackRxParityCnt++;
+					}
+					else
+					{
+						gu8v_RxSecondData = (gu8v_RxSecondData<<1) | 0x00;
+					}
+					if (lu8v_HijackRxCnt == 8)
+					{
+						lu8v_HijackRxState = Hijack_RX_ParityBit;
+						lu8v_HijackRxCnt = 0;
+					}
+				}
 				break;
 			case Hijack_RX_ParityBit:
+				if (gbv_RxBitHigh == (lu8v_HijackRxParityCnt & 0x01))
+				{
+					lu8v_HijackRxState = Hijack_RX_StopBit;
+				}
+				else
+				{
+					gbv_RxError = 1;
+				}
 				break;
 			case Hijack_RX_StopBit:
+				if (gbv_RxBitHigh == 1)
+				{
+					lu8v_HijackRxState = Hijack_RX_StopIdle;
+				}
+				else
+				{
+					gbv_RxError = 1;
+				}
 				break;
 			case Hijack_RX_StopIdle:
+				if (lu8v_HijackRxCnt <3)
+				{
+					lu8v_HijackRxCnt++;
+					if (gbv_RxBitHigh == 0)
+					{
+						gbv_RxError = 1;
+					}
+
+				}
+				if (lu8v_HijackRxCnt == 3)
+				{
+					gbv_RxDataOk = 1;
+					lu8v_HijackRxState = Hijack_RX_Bias;
+				}
 				break;
 			default:
 				break;
@@ -215,14 +301,14 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 				lu8v_HijackTxCnt++;
 				if (lu8v_HijackTxCnt < 8)
 				{
-					if (((gu8v_FisrtData <<lu8v_HijackTxCnt) & 0x80) == 0x80)
+					if (((gu8v_TxFisrtData <<lu8v_HijackTxCnt) & 0x80) == 0x80)
 					{
 						gbv_TxBitHigh = 1;
+						lu8v_HijackTxParityCnt++;
 					}
 					else
 					{
 						gbv_TxBitHigh = 0;
-						lu8v_HijackParityCnt++;
 					}
 				}
 				else
@@ -235,14 +321,14 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 				lu8v_HijackTxCnt++;
 				if (lu8v_HijackTxCnt < 8)
 				{
-					if (((gu8v_SecondData <<lu8v_HijackTxCnt) & 0x80) == 0x80)
+					if (((gu8v_TxSecondData <<lu8v_HijackTxCnt) & 0x80) == 0x80)
 					{
 						gbv_TxBitHigh = 1;
+						lu8v_HijackTxParityCnt++;
 					}
 					else
 					{
 						gbv_TxBitHigh = 0;
-						lu8v_HijackParityCnt++;
 					}
 				}
 				else
@@ -252,7 +338,7 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 				}
 				break;
 			case Hijack_TX_ParityBit:
-				if ((lu8v_HijackParityCnt & 0x01) == 0x01)
+				if ((lu8v_HijackTxParityCnt & 0x01) == 0x00)
 				{
 					gbv_TxBitHigh = 1;
 				}

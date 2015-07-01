@@ -37,6 +37,14 @@ void fun_KeyScan()
 		if (gbv_KeyPress)
 		{
 			gu8v_KeyDebounceCnt++;   // Key Debounce
+			// 按键动作
+			if (gu8v_KeyDebounceCnt > SHORTPRESS)
+			{
+				gbv_KeyLongPress = 0; //短按 取鍵值
+				gu8v_KeyRelease = gu8v_KeyLast ^ KeyPortIO_Default;
+				gbv_KeyPress = 0;
+				gu8v_KeyDebounceCnt = 0;
+			}
 		}
 		else
 		{
@@ -49,19 +57,19 @@ void fun_KeyScan()
 		// 按鍵抬起
 		if (gbv_KeyPress)
 		{
-			// 按键释放动作
-			if (gu8v_KeyDebounceCnt > LOOGPRESS)
-			{
-				gbv_KeyLongPress = 1; //長按 取鍵值
-				gu8v_KeyRelease = gu8v_KeyLast ^ KeyPortIO_Default;
-			}
-			if (SHORTPRESS < gu8v_KeyDebounceCnt &&  gu8v_KeyDebounceCnt< LOOGPRESS)
-			{
-				gbv_KeyLongPress = 0; //短按 取鍵值
-				gu8v_KeyRelease = gu8v_KeyLast ^ KeyPortIO_Default;
-			}
-			gbv_KeyPress = 0;
-			gu8v_KeyDebounceCnt = 0;
+//			// 按键释放动作
+//			if (gu8v_KeyDebounceCnt > LOOGPRESS)
+//			{
+//				gbv_KeyLongPress = 1; //長按 取鍵值
+//				gu8v_KeyRelease = gu8v_KeyLast ^ KeyPortIO_Default;
+//			}
+//			if (SHORTPRESS < gu8v_KeyDebounceCnt &&  gu8v_KeyDebounceCnt< LOOGPRESS)
+//			{
+//				gbv_KeyLongPress = 0; //短按 取鍵值
+//				gu8v_KeyRelease = gu8v_KeyLast ^ KeyPortIO_Default;
+//			}
+//			gbv_KeyPress = 0;
+//			gu8v_KeyDebounceCnt = 0;
 		}
 		else
 		{
@@ -84,7 +92,7 @@ void fun_KeyTask()
 	{
 		gu8v_TxDataHigh--;
 		gu8v_TxDataLow++;
-		fun_HijcakTxStart(gu8v_TxDataHigh,gu8v_TxDataLow);
+		fun_HijcakTx(gu8v_TxDataHigh,gu8v_TxDataLow);
 	}
 	gu8v_KeyRelease = 0;
 }
