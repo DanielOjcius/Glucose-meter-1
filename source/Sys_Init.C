@@ -63,7 +63,11 @@ void fun_PowerOnInit()
 //Timer1
 //Timer2
 // INTO
-	_integ = INTEG_Default;
+	_integ &= 0b11111100;
+	_integ |= INT0_Defualt;
+// INT1
+	_integ &= 0b11110011;
+	_integ |= INT1_Defualt;
 	_int0f = 0;
 	_int0e = 1;
 	//TimeBase
@@ -72,7 +76,7 @@ void fun_PowerOnInit()
 	_tb0e = 1;
 	_tb1f = 0;
 	_tb1e = 1;
-	_emi  = 1;	//開啟TimeBase 1作為喚醒檢測
+	_emi  = 1;
 }
 /********************************************************************
 Function: 關閉各個模塊進入HLAT模式
@@ -84,23 +88,35 @@ void fun_PrepareToHalt()
 {
 
 	fun_GPIOInit();
-	//關閉ADC及LDO,VCM等
-//	fun_ADCStop();
+	// 開啟按鍵喚醒
+	Hijack_Wakeup_IO =1;
+	Hijack_Wakeup    =0;
+	Hijack_Wakeup_W = 1;
 	//關閉 timer
 	_t0on = 0;
-//	_pt1on = 0;
-//	_pt2on = 0;
+
 	// 關閉 UART
 	_uarten = 0;
 	// 關閉 SIM
 	_simen = 0;
 	// 關閉中斷
 	_emi = 0;
-	_tb1e = 0;
-	_tb1f = 0;
-	_tb0e = 0;
-	_tb0f = 0;
+	_tbon =0;
+	// INT
+	_integ &=0b00000011;
+	_integ |=INT0_Disable;
 	_wdtc = WDT_Disable;
+}
+void fun_WakeUpFromHalt()
+{
+	fun_HijackInit();
+	fun_KeyInit();
+	_lcden = 1;
+	// 開啟中斷
+	_emi = 1;
+	_tbon = 1;
+	WorkModeState = STRIPSCHECKMODE;
+	_wdtc = WDT_Function_Default;
 }
 //HALT
 //SLEEPMode0	@(IDLEN==0  & LVDEN==Disable & WDT Disable )

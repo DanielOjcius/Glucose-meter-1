@@ -19,7 +19,7 @@ void fun_GPIOInit();
 void fun_RamInit();
 void fun_SysInit();
 void fun_PrepareToHalt();
-
+void fun_WakeUpFromHalt();
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 中斷地址 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #define	START_VECTOR			0x000		// 主程序
@@ -357,6 +357,15 @@ void fun_PrepareToHalt();
 // BIT 1~0  INT1S1,INT1S0:INT0腳中斷邊沿控制位
 // 			00:  除能     01:  上升沿
 //			10:  下降沿   11:  雙邊沿
-#define INTEG_Default	0x03
+#define INT0_Disable	0b00000000
+#define INT0_Rising		0b00000001
+#define INT0_Falling	0b00000010
+#define INT0_Double		0b00000011
+#define INT0_Defualt	INT0_Double
 
+#define INT1_Disable	0b00000000
+#define INT1_Rising		0b00000100
+#define INT1_Falling	0b00001000
+#define INT1_Double		0b00001100
+#define INT1_Defualt	INT1_Disable
 #endif

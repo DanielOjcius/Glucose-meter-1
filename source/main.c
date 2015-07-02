@@ -31,9 +31,10 @@ void main()
 		//上電30S后進入休眠狀態
 		gu8v_HaltTime  = HaltTime_Default - HaltTime30S;
 		// User RAM config
+		fun_HijackInit();
 		gu8v_TxDataLow =0;
 		gu8v_TxDataHigh=255;
-		WorkModeState = STRIPSCHECKMODE;
+		WorkModeState = HALTMODE;
 		gbv_TxDataOk = 1;
 	}
 	else
@@ -50,7 +51,7 @@ void main()
 		//是否到睡眠時間
 		if (gu8v_HaltTime > HaltTime_Default)
 		{
-				WorkModeState = HALTMODE;
+//				WorkModeState = HALTMODE;
 		}
 		if (gbv_7_8ms == 1)
 		{
@@ -83,7 +84,8 @@ void main()
 				GCC_HALT();
 				GCC_NOP();
 				GCC_NOP();
-				GCC_NOP();				
+				GCC_NOP();
+				fun_WakeUpFromHalt();
 				break;
 			default:
 				break;

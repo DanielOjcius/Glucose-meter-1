@@ -16,6 +16,7 @@
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 變量聲明 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 extern volatile unsigned char gu8v_HaltTime;		// MCU休眠時間計時
+extern volatile unsigned char WorkModeState;		// MCU工作模式狀態標誌位
 extern volatile unsigned char gu8v_TxDataHigh;
 extern volatile unsigned char gu8v_TxDataLow;
 extern volatile __byte_type 	gu8v_FlagMain; 			// Bit標誌位

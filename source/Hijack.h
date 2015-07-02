@@ -15,6 +15,7 @@
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 公共函數 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 void fun_HijcakTx(unsigned char FisrtData,unsigned char SecondData);
 void fun_HijackRx();
+void fun_HijackInit();
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 變量聲明 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 extern volatile __byte_type 	gu8v_FlagTx; 			// Bit標誌位
 #define gbv_TxBitHigh			gu8v_FlagTx.bits.b0 		// 按鍵長按標誌位
@@ -57,12 +58,12 @@ extern volatile __byte_type 	gu8v_FlagRx;				// Bit標誌位
 #define Hijack_TX 	 		_pa5
 #define Hijack_RX_IO 		_pac6
 #define Hijack_RX 	 		_pa6
-#define Hijack_RX_IO 		_pac6
-#define Hijack_RX 	 		_pa6
-#define Hijack_Wakeup_IO 	_pac6
-#define Hijack_Wakeup 	 	_pa6
-#define Hijack_ENVCC_IO 	_pac4
-#define Hijack_ENVCC    	_pa4
+#define Hijack_Wakeup_IO 	_pac4
+#define Hijack_Wakeup 	 	_pa4
+#define Hijack_Wakeup_W	 	_pawu4
+
+#define Hijack_ENVCC_IO 	_pac3
+#define Hijack_ENVCC    	_pa3
 #define HijackFrequency0	1378
 #define HijackFrequency1	HijackFrequency0/2				//Fsk high的頻率為low的一半
 #define HiajackCnt0			1000000/HijackFrequency0/2
