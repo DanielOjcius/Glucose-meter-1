@@ -299,6 +299,42 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 		{
 			// 需要給手機端低位計算一個停止標誌
 			// 手機接收端
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
+			GCC_NOP();
 			_t0on = 0;
 			gbv_TxDataOk = 1;
 			Hijack_TX = 0;
@@ -336,7 +372,6 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 					break;
 				// 第一筆DATA
 				case Hijack_TX_FirstData:
-					lu8v_HijackTxCnt++;
 					if (lu8v_HijackTxCnt < 8)
 					{
 						if (((gu8v_TxFisrtData <<lu8v_HijackTxCnt) & 0x80) == 0x80)
@@ -348,7 +383,8 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 						{
 							gbv_TxBitHigh = 0;
 						}
-						if (lu8v_HijackTxCnt == 7)
+						lu8v_HijackTxCnt++;
+						if (lu8v_HijackTxCnt == 8)
 						{
 							lu8v_HijackTxCnt = 0;
 							lu8v_HijackTxState = Hijack_TX_SecondData;
@@ -357,7 +393,6 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 					break;
 				// 第二筆DATA
 				case Hijack_TX_SecondData:
-					lu8v_HijackTxCnt++;
 					if (lu8v_HijackTxCnt < 8)
 					{
 						if (((gu8v_TxSecondData <<lu8v_HijackTxCnt) & 0x80) == 0x80)
@@ -369,7 +404,8 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 						{
 							gbv_TxBitHigh = 0;
 						}
-						if (lu8v_HijackTxCnt == 7)
+						lu8v_HijackTxCnt++;
+						if (lu8v_HijackTxCnt == 8)
 						{
 							lu8v_HijackTxCnt = 0;
 							lu8v_HijackTxState = Hijack_TX_ParityBit;
@@ -381,6 +417,10 @@ DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 					if ((lu8v_HijackTxParityCnt & 0x01) == 0x00)
 					{
 						gbv_TxBitHigh = 1;
+					}
+					else
+					{
+						gbv_TxBitHigh = 0;
 					}
 					lu8v_HijackTxState = Hijack_TX_StopBit;
 					break;

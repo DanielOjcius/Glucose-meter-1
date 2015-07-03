@@ -287,8 +287,8 @@ void fun_WakeUpFromHalt();
 //			1~255: 256X(1~255)‚€TMn•rçŠßLÆÚ
 #define TM2RP_Default       0x00 	// only for STM TM2
 // for Hijack TX
-#define TM0AL_Default		HiajackCnt0%255
-#define TM0AH_Default		HiajackCnt0/255
+#define TM0AL_Default		HiajackCnt1%255
+#define TM0AH_Default		HiajackCnt1/255
 
 #define TM1AL_Default		0x00
 #define TM1AH_Default		0x00
