@@ -34,7 +34,7 @@ void main()
 		fun_HijackInit();
 		gu8v_TxDataLow =0;
 		gu8v_TxDataHigh=255;
-		WorkModeState = STRIPSCHECKMODE;
+		WorkModeState = HALTMODE;
 	}
 	else
 	{

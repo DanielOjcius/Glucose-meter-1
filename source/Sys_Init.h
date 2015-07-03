@@ -361,7 +361,7 @@ void fun_WakeUpFromHalt();
 #define INT0_Rising		0b00000001
 #define INT0_Falling	0b00000010
 #define INT0_Double		0b00000011
-#define INT0_Defualt	INT0_Double
+#define INT0_Defualt	INT0_Rising
 
 #define INT1_Disable	0b00000000
 #define INT1_Rising		0b00000100

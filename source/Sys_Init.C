@@ -120,6 +120,9 @@ void fun_WakeUpFromHalt()
 	_integ |= INT0_Defualt;
 	WorkModeState = STRIPSCHECKMODE;
 	_wdtc = WDT_Function_Default;
+	// †¾ÐÑºóé_†¢ OPA
+	Hijack_ENVCC_IO = 0;
+	Hijack_ENVCC = 1;
 }
 //HALT
 //SLEEPMode0	@(IDLEN==0  & LVDEN==Disable & WDT Disable )
