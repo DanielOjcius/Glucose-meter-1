@@ -122,6 +122,8 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 	{
 		gbv_RxFirstEnter = 0;
 		gbv_RxSecondEnter= 1;
+		// 第一個bit由於不同手機可能會有特殊音效處理時間不准不做判斷
+		gbv_RxFirstBit = 1;
 		lu8v_HijackRxState = Hijack_RX_Bias;
 	}
 	else if (gbv_RxSecondEnter)
@@ -137,33 +139,36 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 		gbv_RxSecondEnter = 1;
 		gu16_TimeCnt2.byte.byte1 = gu8v_Rxtemp1;
 		gu16_TimeCnt2.byte.byte0 = gu8v_Rxtemp0;
-		gbv_RxGetBitOk = 1;
-	}
-	if (gbv_RxGetBitOk)
-	{
-		gbv_RxGetBitOk = 0;
-		if ((gu16_TimeCnt1.u16 < hijack_Period0_Max) &&(gu16_TimeCnt1.u16 < hijack_Period0_Min))
+		if (gbv_RxFirstBit)
 		{
-			if ((gu16_TimeCnt2.u16<hijack_Period0_Max)&&(gu16_TimeCnt2.u16 < hijack_Period0_Min))
-			{
-				gbv_RxBitHigh = 0;
-				gbv_RxDealBitOk = 1;
-			}
-		}
-		else if ((gu16_TimeCnt1.u16 < hijack_Period1_Max)&&(gu16_TimeCnt1.u16<hijack_Period1_Min))
-		{
-			if ((gu16_TimeCnt2.u16<hijack_Period1_Max)&&(gu16_TimeCnt2.u16 < hijack_Period1_Min))
-			{
-				gbv_RxBitHigh = 1;
-				gbv_RxDealBitOk = 1;
-			}
+			gbv_RxFirstBit =0;
 		}
 		else
 		{
-			gbv_RxError = 1;
-			gbv_RxFirstEnter = 1;
+			if ((gu16_TimeCnt1.u16 < hijack_Period0_Max) &&(gu16_TimeCnt1.u16 < hijack_Period0_Min))
+			{
+				if ((gu16_TimeCnt2.u16<hijack_Period0_Max)&&(gu16_TimeCnt2.u16 < hijack_Period0_Min))
+				{
+					gbv_RxBitHigh = 0;
+					gbv_RxDealBitOk = 1;
+				}
+			}
+			else if ((gu16_TimeCnt1.u16 < hijack_Period1_Max)&&(gu16_TimeCnt1.u16<hijack_Period1_Min))
+			{
+				if ((gu16_TimeCnt2.u16<hijack_Period1_Max)&&(gu16_TimeCnt2.u16 < hijack_Period1_Min))
+				{
+					gbv_RxBitHigh = 1;
+					gbv_RxDealBitOk = 1;
+				}
+			}
+			else
+			{
+				gbv_RxError = 1;
+				gbv_RxFirstEnter = 1;
+			}
 		}
 	}
+
 	if (gbv_RxDealBitOk)
 	{
 		gbv_RxDealBitOk = 0;

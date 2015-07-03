@@ -26,7 +26,7 @@ extern volatile __byte_type 	gu8v_FlagTx; 			// Bit標誌位
 #define gbv_TxDataOk			gu8v_FlagTx.bits.b5 		// Hijack發送完成標誌位
 
 extern volatile __byte_type 	gu8v_FlagRx;				// Bit標誌位
-#define gbv_RxGetBitOk			gu8v_FlagRx.bits.b0 		// Hijack接收到一個bit
+#define gbv_RxFirstBit		gu8v_FlagRx.bits.b0 		// Hijack接收到一個bit
 #define gbv_RxDealBitOk			gu8v_FlagRx.bits.b1 		// Hijack接收到一個bit
 #define gbv_RxFirstEnter		gu8v_FlagRx.bits.b2			// 第一次進入Timer標誌位
 #define gbv_RxSecondEnter		gu8v_FlagRx.bits.b3			// 第二次進入Timer標誌位
@@ -64,14 +64,14 @@ extern volatile __byte_type 	gu8v_FlagRx;				// Bit標誌位
 
 #define Hijack_ENVCC_IO 	_pac3
 #define Hijack_ENVCC    	_pa3
-#define HijackFrequency0	1378
-#define HijackFrequency1	HijackFrequency0/2				//Fsk high的頻率為low的一半
-#define HiajackCnt0			1000000/HijackFrequency0/2
-#define HiajackCnt1			1000000/HijackFrequency1/2
+#define HijackFrequency1	1378
+#define HijackFrequency0	HijackFrequency1/2	// 689		// Fsk high的頻率為low的一倍
+#define HiajackCnt0			1000000/HijackFrequency0/2 		// 725
+#define HiajackCnt1			1000000/HijackFrequency1/2 		// 362
 #define Tolerance			25
-#define hijack_Period0_Max	HiajackCnt0 + Tolerance
-#define hijack_Period0_Min	HiajackCnt0 - Tolerance
-#define hijack_Period1_Max	HiajackCnt1 + Tolerance
-#define hijack_Period1_Min	HiajackCnt1 - Tolerance
+#define hijack_Period0_Max	HiajackCnt0 + Tolerance			// 725 + 25 = 750
+#define hijack_Period0_Min	HiajackCnt0 - Tolerance			// 725 - 25 = 700
+#define hijack_Period1_Max	HiajackCnt1 + Tolerance			// 362 + 25 = 387
+#define hijack_Period1_Min	HiajackCnt1 - Tolerance			// 362 - 25 = 337
 
 #endif
