@@ -53,10 +53,10 @@ void fun_PowerOnInit()
 	_mf0e  = 1;
 	_t0ae  = 1;
 //Timer3 for Hijack Rx ²»é_†¢ÖÐ”à
-	_tm3c0 = TM0C0_Default;
-	_tm3c1 = TM0C1_Default;
-	_tm3al = TM0AL_Default;
-	_tm3ah = TM0AH_Default;
+	_tm3c0 = TM3C0_Default;
+	_tm3c1 = TM3C1_Default;
+	_tm3al = TM3AL_Default;
+	_tm3ah = TM3AH_Default;
 	_mf2f  = 0;
 	_mf2e  = 0;
 	_t3ae  = 0;
