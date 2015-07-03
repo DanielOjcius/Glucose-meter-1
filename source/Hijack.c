@@ -19,11 +19,13 @@ volatile unsigned char  gu8v_TxFisrtData;		// Hijack發送第一筆數據
 volatile unsigned char  gu8v_TxSecondData;		// Hijack發送第二筆數據
 
 volatile __byte_type 	gu8v_FlagRx;			// Bit標誌位
-volatile unsigned char  lu8v_HijackRxState;		// Hijack發送狀態
-volatile unsigned char  lu8v_HijackRxCnt;		// Hijack發送狀態
-volatile unsigned char  lu8v_HijackRxParityCnt;	// Hijack發送狀態
-volatile unsigned char  gu8v_RxFisrtData;		// Hijack發送第一筆數據
-volatile unsigned char  gu8v_RxSecondData;		// Hijack發送第二筆數據
+volatile unsigned char  lu8v_HijackRxState;		// Hijack接收狀態
+volatile unsigned char  lu8v_HijackRxCnt;		// Hijack接收狀態
+volatile unsigned char  lu8v_HijackRxParityCnt;	// Hijack接收狀態
+volatile unsigned char  gu8v_RxFisrtData;		// Hijack接收第一筆數據
+volatile unsigned char  gu8v_RxSecondData;		// Hijack接收第二筆數據
+volatile unsigned char  gu8v_Rxtemp0;
+volatile unsigned char  gu8v_Rxtemp1;
 
 volatile __16_type 		gu16_TimeCnt1;			// Hijack 接收週期
 volatile __16_type 		gu16_TimeCnt2;			// Hijack 接收週期
@@ -36,6 +38,7 @@ NOTE	:
 ********************************************************************/
 void fun_HijackInit()
 {
+	gbv_TxDataOk = 1;
 	Hijack_TX_IO = 0;
 	Hijack_TX    = 0;
 	Hijack_Wakeup_IO = 1;
@@ -44,6 +47,9 @@ void fun_HijackInit()
 	Hijack_ENVCC_IO = 0;
 	Hijack_ENVCC = 0;
 	// for Hijack 接收
+	gbv_RxFirstEnter = 1;
+	gbv_RxSecondEnter = 0;
+	gbv_RxThirdEnter=0;
 	Hijack_RX_IO = 1;
 	Hijack_RX 	 = 0;
 	_integ &= 0b11111100;
@@ -108,28 +114,29 @@ NOTE	: Hijack 接收數據
 ********************************************************************/
 DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 {
+	gu8v_Rxtemp1 = _tm3dh;
+	gu8v_Rxtemp0 = _tm3dl;
+	_t3on = 0;
+	_t3on = 1;
 	if (gbv_RxFirstEnter)
 	{
 		gbv_RxFirstEnter = 0;
 		gbv_RxSecondEnter= 1;
-		_t3on = 1;
 		lu8v_HijackRxState = Hijack_RX_Bias;
 	}
 	else if (gbv_RxSecondEnter)
 	{
 		gbv_RxSecondEnter = 0;
 		gbv_RxThirdEnter  = 1;
-		gu16_TimeCnt1.byte.byte1 = _tm3dh;
-		gu16_TimeCnt1.byte.byte0 = _tm3dl;
-		_t3on = 0;
-		_t3on = 1;
+		gu16_TimeCnt1.byte.byte1 = gu8v_Rxtemp1;
+		gu16_TimeCnt1.byte.byte0 = gu8v_Rxtemp0;
 	}
 	else if (gbv_RxThirdEnter)
 	{
 		gbv_RxThirdEnter = 0;
 		gbv_RxSecondEnter = 1;
-		gu16_TimeCnt2.byte.byte1 = _tm3dh;
-		gu16_TimeCnt2.byte.byte0 = _tm3dl;
+		gu16_TimeCnt2.byte.byte1 = gu8v_Rxtemp1;
+		gu16_TimeCnt2.byte.byte0 = gu8v_Rxtemp0;
 		gbv_RxGetBitOk = 1;
 	}
 	if (gbv_RxGetBitOk)

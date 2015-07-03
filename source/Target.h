@@ -30,7 +30,7 @@
 // 			0:  I/O
 //			1:  OP1N(HT45F65)  未使用(HT45F66/HT45F67)
 // BIT 4~0  未使用:讀為 0
-#define PAFS_Default	0B01000000	//INT0 for RX Audio
+#define PAFS_Default	0b01000000	//INT0 for RX Audio
 //                           @--------------PBFS---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -392,7 +392,7 @@
 // BIT 0  SEG10:PE0特殊功能選擇
 // 			0:  SEG8
 //			1:  TP2_0
-#define SFS1_Default 0B00000000
+#define SFS1_Default 0b01000000 //for hijack audio rx
 
 
 #endif

@@ -34,8 +34,7 @@ void main()
 		fun_HijackInit();
 		gu8v_TxDataLow =0;
 		gu8v_TxDataHigh=255;
-		WorkModeState = HALTMODE;
-		gbv_TxDataOk = 1;
+		WorkModeState = STRIPSCHECKMODE;
 	}
 	else
 	{
@@ -61,7 +60,7 @@ void main()
 			fun_LCDUpdate();
 			// 用戶的其他任務
 			// ---------
-			fun_HijcakTx(gu8v_TxDataHigh,gu8v_TxDataLow);
+//			fun_HijcakTx(gu8v_TxDataHigh,gu8v_TxDataLow);
 		}
 		//輪詢各個工作模式
 		switch (WorkModeState)

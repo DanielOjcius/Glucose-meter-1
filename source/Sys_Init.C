@@ -115,6 +115,9 @@ void fun_WakeUpFromHalt()
 	// é_†¢ÖÐ”à
 	_emi = 1;
 	_tbon = 1;
+// INTO
+	_integ &= 0b11111100;
+	_integ |= INT0_Defualt;
 	WorkModeState = STRIPSCHECKMODE;
 	_wdtc = WDT_Function_Default;
 }
