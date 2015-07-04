@@ -63,7 +63,7 @@
 // BIT 0  PBFS0:引腳PB0功能選擇
 // 			0:  I/O
 //			1:  AN0(HT45F65)	  OP2O(HT45F66/HT45F67)
-#define PBFS_Default	0B00000000
+#define PBFS_Default	0b00000000
 //                           @--------------PCFS---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -91,7 +91,7 @@
 // BIT 0  PCFS0:引腳PC0功能選擇
 // 			0:  I/O
 //			1:  SDI1(HT45F65)			配置選項定(HT45F66/HT45F67)
-#define PCFS_Default 	0B00000000
+#define PCFS_Default 	0b00000000
 //                           @--------------PDFS0 for HT45F65---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -118,7 +118,7 @@
 // BIT 0  PDFS00:引腳PD0功能選擇
 // 			0:  I/O
 //			1:  SEG0
-#define PDFS0_Default 	0B00000000
+#define PDFS0_Default 	0b00000000
 //                           @--------------PDFS1 for HT45F65---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -137,7 +137,7 @@
 // BIT 1~0  PDFS52~PDFS51:引腳PD5
 // 			00:  I/O
 //			01:  SEG5
-#define PDFS1_Default 	0B00000000
+#define PDFS1_Default 	0b00000000
 //                           @--------------PDFS for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -170,7 +170,7 @@
 // BIT 0  PDFS0:引腳PD0功能選擇
 // 			0:  I/O
 //			1:  特殊功能(SEG0/TP0_0)
-#define PDFS_Default 	0B00000000
+#define PDFS_Default 	0b00000000
 //                           @--------------PEFS0 for HT45F65---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -194,7 +194,7 @@
 // BIT 1~0  PEFS02~PEFS01:引腳PE0功能選擇
 // 			00:  I/O
 //			01:  SEG8
-#define PEFS0_Default 	0B00000000
+#define PEFS0_Default 	0b00000000
 //                           @--------------PEFS1 for HT45F65---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -217,7 +217,7 @@
 // BIT 0  PEFS4:引腳PE4功能選擇
 //			0: I/O
 //			1: SEG12
-#define PEFS1_Default 	0B00000000
+#define PEFS1_Default 	0b00000000
 //                           @--------------PEFS for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -250,7 +250,7 @@
 // BIT 0  PEFS0:引腳PE0功能選擇
 // 			0:  I/O
 //			1:  特殊功能(SEG8/TP2_0)
-#define PEFS_Default 	0B00000000
+#define PEFS_Default 	0b00000000
 //                           @--------------PFFS for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -283,7 +283,7 @@
 // BIT 0  PFFS0:PF0
 // 			0:  I/O
 //			1:  SEG16
-#define PFFS_Default	0B11111111
+#define PFFS_Default	0b11111111
 //                           @--------------PGFS for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -311,7 +311,7 @@
 // BIT 0  PGFS0:PG0
 // 			0:  I/O
 //			1:  SEG24
-#define PGFS_Default	0B00000000
+#define PGFS_Default	0b00000000
 //                           @--------------PHFS for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -324,7 +324,7 @@
 // BIT 0  PHFS0:引腳PH0
 // 			0:  I/O
 //			1:  SYSCKO
-#define PHFS_Default    0B00000000
+#define PHFS_Default    0b00000000
 //                           @--------------SFS0 for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -359,7 +359,7 @@
 // BIT 0  SFS00:PD0特殊功能選擇
 // 			0:  SEG0
 //			1:  TP0_0
-#define SFS0_Default 0B00000000
+#define SFS0_Default 0b00000000
 //                           @--------------SFS1 for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |

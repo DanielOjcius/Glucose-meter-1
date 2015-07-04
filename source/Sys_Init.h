@@ -101,15 +101,15 @@ void fun_WakeUpFromHalt();
 //WDT time =  2^18/fsub
 //example:(max time 周期最长2^18，Source fs = 32768)
 //WDT time = 2^18/32768= 8s
-#define WDT_Disable				0B10101000
-#define WDTtime2_8				0B01010000  //2^8/Fs
-#define WDTtime2_10				0B01010001	//2^10/Fs
-#define WDTtime2_12				0B01010010	//2^12/Fs
-#define WDTtime2_14				0B01010011	//2^14/Fs
-#define WDTtime2_15				0B01010100	//2^15/Fs
-#define WDTtime2_16				0B01010101	//2^16/Fs
-#define WDTtime2_17				0B01010110	//2^17/Fs
-#define WDTtime2_18				0B01010111	//2^18/Fs
+#define WDT_Disable				0b10101000
+#define WDTtime2_8				0b01010000  //2^8/Fs
+#define WDTtime2_10				0b01010001	//2^10/Fs
+#define WDTtime2_12				0b01010010	//2^12/Fs
+#define WDTtime2_14				0b01010011	//2^14/Fs
+#define WDTtime2_15				0b01010100	//2^15/Fs
+#define WDTtime2_16				0b01010101	//2^16/Fs
+#define WDTtime2_17				0b01010110	//2^17/Fs
+#define WDTtime2_18				0b01010111	//2^18/Fs
 #define WDT_Function_Default	WDTtime2_18
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LVR @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //  ______________________________________________________________________________
@@ -123,10 +123,10 @@ void fun_WakeUpFromHalt();
 // 			01010101:  2.1V     00110011:  2.55V
 //			10011001:  3.15V    10101010:  3.8V
 //          其他值: MCU復位
-#define LVR_Voltage2_1			0B01010101
-#define LVR_Voltage2_55			0B00110011
-#define LVR_Voltage3_15			0B10011001
-#define LVR_Voltage3_8			0B10101010
+#define LVR_Voltage2_1			0b01010101
+#define LVR_Voltage2_55			0b00110011
+#define LVR_Voltage3_15			0b10011001
+#define LVR_Voltage3_8			0b10101010
 #define LVR_Voltage_Default		LVR_Voltage2_1	//POR=2.1V
 //					@-------------IO config--------------@
 //Setting in Target.h
@@ -328,7 +328,7 @@ void fun_WakeUpFromHalt();
 // 			011:  2^11/ftb   100:  2^12/ftb   101:  2^13/ftb
 // 			110:  2^14/ftb   111:  2^15/ftb
 
-#define TimeBase_Default 	0B10110000	//TimeBase1 1S   TimeBase 0  7.8ms
+#define TimeBase_Default 	0b10110000	//TimeBase1 1S   TimeBase 0  7.8ms
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ADC @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //Setting in ADC.h

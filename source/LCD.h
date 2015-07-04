@@ -39,12 +39,10 @@ void fun_LCDUpdate();
 //			0: 1/4duty,32SEG*4COM  // for HT45F66 or HT45F67
 //			1: 1/6duty,30SEG*6COM
 // BIT 4~1  未定義,讀為0
-// 			0:  1.05V
-//			1:  1.25V
 // BIT 0  LVDEN:LCD使能控制位
 // 			0:  除能
 //			1:  使能
 //	在正常,低速和空閒模式下,LCD的開/關可通過此位控制,休眠模式LCD一直關閉
-#define LCDC_Default 0x01
+#define LCDC_Default 0x11
 
 #endif

@@ -18,6 +18,7 @@
 void fun_KeyScan();
 void fun_KeyTask();
 void fun_KeyInit();
+void fun_JackCheck();
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 變量聲明 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 extern volatile __byte_type 	gu8v_FlagKey; 			// 按鍵Bit標誌位
 extern volatile unsigned char 	gu8v_KeyRelease;
@@ -32,11 +33,11 @@ extern volatile unsigned char  	gu8v_KeyShortPress;
 // 按鍵IO選擇
 #define KeyPort  			_pb
 #define KeyPortIO			_pbc
-#define KeyPortIO_Default   0B00100000 // 取Pb5
+#define KeyPortIO_Default   0b00111000 // 取Pb5
 // 定義了按鍵未按下時候的狀態
-#define KeyNoPush			0B00100000
+#define KeyNoPush			0b00111000
 //對應按鍵按下時候的取反狀態
-#define KeyTx				0B00100000  // pb5
+#define KeyTx				0b00100000  // pb5
 #define KEYSCANCYCLE		7.8
 #define LOOGPRESS			1000/KEYSCANCYCLE
 #define SHORTPRESS			100/KEYSCANCYCLE

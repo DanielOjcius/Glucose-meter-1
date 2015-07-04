@@ -52,13 +52,13 @@ void fun_KeyScan()
 			// 按键释放动作
 			if (gu8v_KeyDebounceCnt > LOOGPRESS)
 			{
-				gbv_KeyLongPress = 1; //長按 取鍵值
 				gu8v_KeyRelease = gu8v_KeyLast ^ KeyPortIO_Default;
+				gbv_KeyLongPress = 1; //長按 取鍵值
 			}
 			if (SHORTPRESS < gu8v_KeyDebounceCnt &&  gu8v_KeyDebounceCnt< LOOGPRESS)
 			{
-				gbv_KeyLongPress = 0; //短按 取鍵值
 				gu8v_KeyRelease = gu8v_KeyLast ^ KeyPortIO_Default;
+				gbv_KeyLongPress = 0; //短按 取鍵值
 			}
 			gbv_KeyPress = 0;
 			gu8v_KeyDebounceCnt = 0;
@@ -105,5 +105,14 @@ void fun_KeyInit()
 	gu8v_KeyLast = gu8v_KeyNow;
 	gbv_KeyPress = 0;
 }
-
+void fun_JackCheck()
+{
+	Hijack_Wakeup_IO = 1;
+	GCC_NOP();
+	GCC_NOP();
+	if (Hijack_Wakeup)
+	{
+		WorkModeState = HALTMODE;
+	}
+}
 

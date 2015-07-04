@@ -110,6 +110,7 @@ void fun_PrepareToHalt()
 void fun_WakeUpFromHalt()
 {
 	fun_HijackInit();
+	Hijack_Wakeup_W = 1;
 	fun_KeyInit();
 	_lcden = 1;
 	// é_†¢ÖÐ”à
@@ -123,6 +124,8 @@ void fun_WakeUpFromHalt()
 	// †¾ÐÑºóé_†¢ OPA
 	Hijack_ENVCC_IO = 0;
 	Hijack_ENVCC = 1;
+	// lcd
+	fun_LCDInit();
 }
 //HALT
 //SLEEPMode0	@(IDLEN==0  & LVDEN==Disable & WDT Disable )
@@ -154,7 +157,7 @@ void fun_GPIOInit()
 	_papu= 0xff;
 	_pawu= 0x00;
 	//PB PORT
-	_pbc = 0x00;
+	_pbc = 0xff;
 	_pb  = 0x00;
 	_pbpu= 0xff;
 	//PC PORT

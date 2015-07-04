@@ -35,7 +35,7 @@ void main()
 		fun_HijackInit();
 		gu8v_TxDataLow =0;
 		gu8v_TxDataHigh=255;
-		WorkModeState = HALTMODE;
+		WorkModeState = STRIPSCHECKMODE;
 	}
 	else
 	{
@@ -56,6 +56,7 @@ void main()
 		if (gbv_7_8ms == 1)
 		{
 			gbv_7_8ms = 0;
+			fun_JackCheck();
 			fun_KeyScan();
 			fun_KeyTask();
 			fun_LCDUpdate();
