@@ -36,7 +36,7 @@ extern volatile unsigned char  	gu8v_KeyShortPress;
 // 定義了按鍵未按下時候的狀態
 #define KeyNoPush			0B00100000
 //對應按鍵按下時候的取反狀態
-#define KeyTx			0B00100000  // pb5
+#define KeyTx				0B00100000  // pb5
 #define KEYSCANCYCLE		7.8
 #define LOOGPRESS			1000/KEYSCANCYCLE
 #define SHORTPRESS			100/KEYSCANCYCLE

@@ -18,6 +18,7 @@ volatile unsigned char WorkModeState;		// MCU工作模式狀態標誌位
 volatile unsigned char gu8v_HaltTime;		// MCU休眠時間計時
 volatile unsigned char gu8v_TxDataHigh;
 volatile unsigned char gu8v_TxDataLow;
+volatile unsigned int  gu16v_Temp;
 void main()
 {
 	//判斷是否為上電復位或者非正常情況下的復位
@@ -45,7 +46,7 @@ void main()
 //主循環
 	while(1)
 	{
-		GCC_CLRWDT();
+		GCC_CLRWDT();		
 		fun_HijackRx();
 		//是否到睡眠時間
 		if (gu8v_HaltTime > HaltTime_Default)

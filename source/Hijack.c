@@ -27,8 +27,7 @@ volatile unsigned char  gu8v_RxSecondData;		// Hijack接收第二筆數據
 volatile unsigned char  gu8v_Rxtemp0;
 volatile unsigned char  gu8v_Rxtemp1;
 
-volatile __16_type 		gu16_TimeCnt1;			// Hijack 接收週期
-volatile __16_type 		gu16_TimeCnt2;			// Hijack 接收週期
+volatile __16_type 		gu16_TimeCnt;			// Hijack 接收週期
 
 /********************************************************************
 Function: Hijack 初始化
@@ -91,8 +90,8 @@ void fun_HijackRx()
 		//回復到初始接收狀態
 		gbv_RxFirstEnter = 1;
 		gbv_RxSecondEnter =0;
-		gbv_RxThirdEnter =0;
 		lu8v_HijackRxCnt = 0;
+		gu8v_Rxtemp0=0;
 	}
 	else if (gbv_RxError)
 	{
@@ -102,8 +101,9 @@ void fun_HijackRx()
 		// 回復到初始接收狀態
 		gbv_RxFirstEnter = 1;
 		gbv_RxSecondEnter =0;
-		gbv_RxThirdEnter =0;
 		lu8v_HijackRxCnt = 0;
+		_t3on = 0;
+		gu8v_Rxtemp0=0;
 	}
 }
 /********************************************************************
@@ -114,11 +114,159 @@ NOTE	: Hijack 接收數據
 ********************************************************************/
 DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 {
-	gu8v_Rxtemp1 = _tm3dh;
-	gu8v_Rxtemp0 = _tm3dl;
+	gu16_TimeCnt.byte.byte1 = _tm3dh;
+	gu16_TimeCnt.byte.byte0 = _tm3dl;
 	_t3on = 0;
 	_t3on = 1;
-	if (gbv_RxFirstEnter)
+	if (gbv_RxSecondEnter)
+	{
+		gu8v_Rxtemp0++;
+		if ((gu16_TimeCnt.u16 < hijack_Period0_Max) &&(gu16_TimeCnt.u16 > hijack_Period0_Min))
+		{
+			gbv_RxBitHigh = 0;
+			gbv_RxDealBitOk = 1;
+		}
+		else if ((gu16_TimeCnt.u16 < hijack_Period1_Max)&&(gu16_TimeCnt.u16>hijack_Period1_Min))
+		{
+			gbv_RxBitHigh = 1;
+			gbv_RxDealBitOk = 1;
+		}
+		else
+		{
+			gbv_RxError = 1;
+			gbv_RxDealBitOk  = 0;
+		}
+		if (gbv_RxDealBitOk)
+		{
+			gbv_RxDealBitOk = 0;
+			switch(lu8v_HijackRxState)
+			{
+				// MCU Bias需要特殊處理,接收到1為開始信號，不做0的個數判斷
+				// 因為部分手機對輸出會有淡入淡出音效，會造成部分0丟失
+				// TODO 是否可解除手機的特殊音效
+				case Hijack_RX_Bias:
+					if (gbv_RxBitHigh == 0)
+					{
+						lu8v_HijackRxCnt++;
+						if (lu8v_HijackRxCnt > 12)
+						{
+							// 由於手機BIAS只發送了12bit，若超過12bit則為錯誤
+							GCC_CLRWDT();
+							gbv_RxError = 1;
+						}
+					}
+					else
+					{
+						lu8v_HijackRxState = Hijack_RX_StartIdle;
+						lu8v_HijackRxCnt = 1;
+					}
+					break;
+				case Hijack_RX_StartIdle:
+					if ((gbv_RxBitHigh == 1)&&(lu8v_HijackRxCnt<3))
+					{
+						lu8v_HijackRxCnt++;
+						if (lu8v_HijackRxCnt == 3)
+						{
+							lu8v_HijackRxState = Hijack_RX_StartBit;
+							lu8v_HijackRxCnt = 0;
+						}
+					}
+					else
+					{
+						gbv_RxError = 1;
+					}
+					break;
+				case Hijack_RX_StartBit:
+					if (gbv_RxBitHigh == 0)
+					{
+						lu8v_HijackRxState = Hijack_RX_FirstData;
+					}
+					else
+					{
+						gbv_RxError = 1;
+					}
+					break;
+				case Hijack_RX_FirstData:
+					if (lu8v_HijackRxCnt<8)
+					{
+						lu8v_HijackRxCnt++;
+						if (gbv_RxBitHigh == 1)
+						{
+							gu8v_RxFisrtData = (gu8v_RxFisrtData<<1) | 0x01;
+							lu8v_HijackRxParityCnt++;
+						}
+						else
+						{
+							gu8v_RxFisrtData = (gu8v_RxFisrtData<<1) | 0x00;
+						}
+						if (lu8v_HijackRxCnt == 8)
+						{
+							lu8v_HijackRxState = Hijack_RX_SecondData;
+							lu8v_HijackRxCnt = 0;
+						}
+					}
+					break;
+				case Hijack_RX_SecondData:
+					if (lu8v_HijackRxCnt<8)
+					{
+						lu8v_HijackRxCnt++;
+						if (gbv_RxBitHigh == 1)
+						{
+							gu8v_RxSecondData = (gu8v_RxSecondData<<1) | 0x01;
+							lu8v_HijackRxParityCnt++;
+						}
+						else
+						{
+							gu8v_RxSecondData = (gu8v_RxSecondData<<1) | 0x00;
+						}
+						if (lu8v_HijackRxCnt == 8)
+						{
+							lu8v_HijackRxState = Hijack_RX_ParityBit;
+							lu8v_HijackRxCnt = 0;
+						}
+					}
+					break;
+				case Hijack_RX_ParityBit:
+					if (gbv_RxBitHigh != (lu8v_HijackRxParityCnt & 0x01))
+					{
+						lu8v_HijackRxState = Hijack_RX_StopBit;
+					}
+					else
+					{
+						gbv_RxError = 1;
+					}
+					break;
+				case Hijack_RX_StopBit:
+					if (gbv_RxBitHigh == 1)
+					{
+						lu8v_HijackRxState = Hijack_RX_StopIdle;
+					}
+					else
+					{
+						gbv_RxError = 1;
+					}
+					break;
+				case Hijack_RX_StopIdle:
+					if ((gbv_RxBitHigh == 1)&&(lu8v_HijackRxCnt<2))
+					{
+						lu8v_HijackRxCnt++;
+						if (lu8v_HijackRxCnt == 2)
+						{
+							gbv_RxDataOk = 1;
+							lu8v_HijackRxState = Hijack_RX_Bias;
+						}
+					}
+					else
+					{
+						gbv_RxError = 1;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+	else if (gbv_RxFirstEnter)
 	{
 		gbv_RxFirstEnter = 0;
 		gbv_RxSecondEnter= 1;
@@ -126,174 +274,8 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 		gbv_RxFirstBit = 1;
 		lu8v_HijackRxState = Hijack_RX_Bias;
 	}
-	else if (gbv_RxSecondEnter)
-	{
-		gbv_RxSecondEnter = 0;
-		gbv_RxThirdEnter  = 1;
-		gu16_TimeCnt1.byte.byte1 = gu8v_Rxtemp1;
-		gu16_TimeCnt1.byte.byte0 = gu8v_Rxtemp0;
-	}
-	else if (gbv_RxThirdEnter)
-	{
-		gbv_RxThirdEnter = 0;
-		gbv_RxSecondEnter = 1;
-		gu16_TimeCnt2.byte.byte1 = gu8v_Rxtemp1;
-		gu16_TimeCnt2.byte.byte0 = gu8v_Rxtemp0;
-		if (gbv_RxFirstBit)
-		{
-			gbv_RxFirstBit =0;
-		}
-		else
-		{
-			if ((gu16_TimeCnt1.u16 < hijack_Period0_Max) &&(gu16_TimeCnt1.u16 < hijack_Period0_Min))
-			{
-				if ((gu16_TimeCnt2.u16<hijack_Period0_Max)&&(gu16_TimeCnt2.u16 < hijack_Period0_Min))
-				{
-					gbv_RxBitHigh = 0;
-					gbv_RxDealBitOk = 1;
-				}
-			}
-			else if ((gu16_TimeCnt1.u16 < hijack_Period1_Max)&&(gu16_TimeCnt1.u16<hijack_Period1_Min))
-			{
-				if ((gu16_TimeCnt2.u16<hijack_Period1_Max)&&(gu16_TimeCnt2.u16 < hijack_Period1_Min))
-				{
-					gbv_RxBitHigh = 1;
-					gbv_RxDealBitOk = 1;
-				}
-			}
-			else
-			{
-				gbv_RxError = 1;
-				gbv_RxFirstEnter = 1;
-			}
-		}
-	}
 
-	if (gbv_RxDealBitOk)
-	{
-		gbv_RxDealBitOk = 0;
-		switch(lu8v_HijackRxState)
-		{
-			case Hijack_RX_Bias:
-				if ((gbv_RxBitHigh == 0) &&(lu8v_HijackRxCnt<12))
-				{
-					lu8v_HijackRxCnt++;
-					if (lu8v_HijackRxCnt == 12)
-					{
-						lu8v_HijackRxState = Hijack_RX_StartIdle;
-						lu8v_HijackRxCnt = 0;
-					}
-				}
-				else
-				{
-					gbv_RxError = 1;
-				}
-				break;
-			case Hijack_RX_StartIdle:
-				if ((gbv_RxBitHigh == 1)&&(lu8v_HijackRxCnt<3))
-				{
-					lu8v_HijackRxCnt++;
-					if (lu8v_HijackRxCnt == 3)
-					{
-						lu8v_HijackRxState = Hijack_RX_StartBit;
-						lu8v_HijackRxCnt = 0;
-					}
-				}
-				else
-				{
-					gbv_RxError = 1;
-				}
-				break;
-			case Hijack_RX_StartBit:
-				if (gbv_RxBitHigh == 0)
-				{
-					lu8v_HijackRxState = Hijack_RX_FirstData;
-				}
-				else
-				{
-					gbv_RxError = 1;
-				}
-				break;
-			case Hijack_RX_FirstData:
-				if (lu8v_HijackRxCnt<8)
-				{
-					lu8v_HijackRxCnt++;
-					if (gbv_RxBitHigh == 1)
-					{
-						gu8v_RxFisrtData = (gu8v_RxFisrtData<<1) | 0x01;
-						lu8v_HijackRxParityCnt++;
-					}
-					else
-					{
-						gu8v_RxFisrtData = (gu8v_RxFisrtData<<1) | 0x00;
-					}
-					if (lu8v_HijackRxCnt == 8)
-					{
-						lu8v_HijackRxState = Hijack_RX_SecondData;
-						lu8v_HijackRxCnt = 0;
-					}
-				}
-				break;
-			case Hijack_RX_SecondData:
-				if (lu8v_HijackRxCnt<8)
-				{
-					lu8v_HijackRxCnt++;
-					if (gbv_RxBitHigh == 1)
-					{
-						gu8v_RxSecondData = (gu8v_RxSecondData<<1) | 0x01;
-						lu8v_HijackRxParityCnt++;
-					}
-					else
-					{
-						gu8v_RxSecondData = (gu8v_RxSecondData<<1) | 0x00;
-					}
-					if (lu8v_HijackRxCnt == 8)
-					{
-						lu8v_HijackRxState = Hijack_RX_ParityBit;
-						lu8v_HijackRxCnt = 0;
-					}
-				}
-				break;
-			case Hijack_RX_ParityBit:
-				if (gbv_RxBitHigh == (lu8v_HijackRxParityCnt & 0x01))
-				{
-					lu8v_HijackRxState = Hijack_RX_StopBit;
-				}
-				else
-				{
-					gbv_RxError = 1;
-				}
-				break;
-			case Hijack_RX_StopBit:
-				if (gbv_RxBitHigh == 1)
-				{
-					lu8v_HijackRxState = Hijack_RX_StopIdle;
-				}
-				else
-				{
-					gbv_RxError = 1;
-				}
-				break;
-			case Hijack_RX_StopIdle:
-				if (lu8v_HijackRxCnt <3)
-				{
-					lu8v_HijackRxCnt++;
-					if (gbv_RxBitHigh == 0)
-					{
-						gbv_RxError = 1;
-					}
 
-				}
-				if (lu8v_HijackRxCnt == 3)
-				{
-					gbv_RxDataOk = 1;
-					lu8v_HijackRxState = Hijack_RX_Bias;
-				}
-				break;
-			default:
-				break;
-		}
-	}
 }
 /********************************************************************
 Function: Timer0中斷服務子程序

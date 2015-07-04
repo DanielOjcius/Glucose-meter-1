@@ -162,7 +162,7 @@ void fun_WakeUpFromHalt();
 #define TM0C0_Default		0x00
 #define TM1C0_Default		0x00
 #define TM2C0_Default		0x00
-#define TM3C0_Default		0x00
+#define TM3C0_Default		0x20 		// 4us
 //                           @--------------TMnC1---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |
@@ -297,8 +297,8 @@ void fun_WakeUpFromHalt();
 #define TM2AL_Default		0x00
 #define TM2AH_Default		0x00
 // for Hijack RX
-#define TM3AL_Default		0xFF
-#define TM3AH_Default		0xFF
+#define TM3AL_Default		0xF4
+#define TM3AH_Default		0x01	// 500*4us÷–î‡
 //					@-------Internal Power config--------@
 //Setting in Others file  when need
 

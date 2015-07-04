@@ -66,12 +66,11 @@ extern volatile __byte_type 	gu8v_FlagRx;				// Bit標誌位
 #define Hijack_ENVCC    	_pa3
 #define HijackFrequency1	1378
 #define HijackFrequency0	HijackFrequency1/2	// 689		// Fsk high的頻率為low的一倍
-#define HiajackCnt0			1000000/HijackFrequency0/2 		// 725
+#define HiajackCnt0			1000000/(HijackFrequency0)/2 		// 725
 #define HiajackCnt1			1000000/HijackFrequency1/2 		// 362
-#define Tolerance			25
-#define hijack_Period0_Max	HiajackCnt0 + Tolerance			// 725 + 25 = 750
-#define hijack_Period0_Min	HiajackCnt0 - Tolerance			// 725 - 25 = 700
-#define hijack_Period1_Max	HiajackCnt1 + Tolerance			// 362 + 25 = 387
-#define hijack_Period1_Min	HiajackCnt1 - Tolerance			// 362 - 25 = 337
-
+#define Tolerance			50
+#define hijack_Period0_Max	(HiajackCnt0*2)/4 + Tolerance	// 1450/4 + 20 = 382
+#define hijack_Period0_Min	(HiajackCnt0*2)/4 - Tolerance	// 1450/4 - 20 = 342
+#define hijack_Period1_Max	(HiajackCnt1*2)/4 + Tolerance	// 725/4 + 20 = 201
+#define hijack_Period1_Min	(HiajackCnt1*2)/4 - Tolerance	// 725/4 - 20 = 161
 #endif
