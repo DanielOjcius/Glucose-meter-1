@@ -24,6 +24,9 @@ extern volatile __byte_type 	gu8v_FlagTx; 			// Bit標誌位
 #define gbv_TxThirdEnter		gu8v_FlagTx.bits.b3  		// 第三次進入Timer標誌位
 #define gbv_TxFourthEnter		gu8v_FlagTx.bits.b4			// 第四次進入Timer標誌位
 #define gbv_TxDataOk			gu8v_FlagTx.bits.b5 		// Hijack發送完成標誌位
+#define gbv_Txbuf				gu8v_FlagTx.bits.b6			// 顯示發送值
+#define gbv_Rxbuf				gu8v_FlagTx.bits.b7			// 顯示接收值
+
 
 extern volatile __byte_type 	gu8v_FlagRx;				// Bit標誌位
 #define gbv_RxFirstBit		gu8v_FlagRx.bits.b0 		// Hijack接收到一個bit

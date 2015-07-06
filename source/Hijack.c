@@ -75,6 +75,7 @@ void fun_HijcakTx(unsigned char FisrtData,unsigned char SecondData)
 		//演示用
 		gu8v_TxDataHigh--;
 		gu8v_TxDataLow++;
+		fun_LCDUpdate(gu8v_TxDataHigh,gu8v_TxDataLow);
 		// 開啟time 發送音頻信號
 		_t0on = 1;
 		_emi = 1;
@@ -85,8 +86,7 @@ void fun_HijackRx()
 	if (gbv_RxDataOk)
 	{
 		gbv_RxDataOk = 0;
-		// TODO 更新數據到LCD
-
+		fun_LCDUpdate(gu8v_RxFisrtData,gu8v_RxSecondData);
 		//回復到初始接收狀態
 		gbv_RxFirstEnter = 1;
 		gbv_RxSecondEnter =0;

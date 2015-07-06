@@ -25,6 +25,14 @@ void main()
 	//如果是上電復位，執行上電復位初始化，反之執行WDT溢出初始化
 	if (_to == 0 || _pdf ==0)
 	{
+		_pbc = 0x00;
+		_pb = 0x00;
+		_pbpu = 0xff;
+		GCC_CLRWDT();
+		GCC_CLRWDT();
+		_pbc = 0b00111000;
+		GCC_CLRWDT();
+
 		//上電復位初始化
 		fun_PowerOnInit();		// config SYS Clock,RAM,LVR,wdt,Timer,TimeBase
 		fun_KeyInit();
@@ -46,7 +54,7 @@ void main()
 //主循環
 	while(1)
 	{
-		GCC_CLRWDT();		
+		GCC_CLRWDT();
 		fun_HijackRx();
 		//是否到睡眠時間
 		if (gu8v_HaltTime > HaltTime_Default)
@@ -56,10 +64,9 @@ void main()
 		if (gbv_7_8ms == 1)
 		{
 			gbv_7_8ms = 0;
-			fun_JackCheck();
+//			fun_JackCheck();
 			fun_KeyScan();
 			fun_KeyTask();
-			fun_LCDUpdate();
 			// 用戶的其他任務
 			// ---------
 //			fun_HijcakTx(gu8v_TxDataHigh,gu8v_TxDataLow);
