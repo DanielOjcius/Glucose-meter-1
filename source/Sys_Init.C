@@ -157,7 +157,7 @@ void fun_GPIOInit()
 	_papu= 0xff;
 	_pawu= 0x00;
 	//PB PORT
-	_pbc = 0xff;
+	_pbc = 0x00;
 	_pb  = 0x00;
 	_pbpu= 0xff;
 	//PC PORT

@@ -82,8 +82,6 @@ void fun_KeyTask()
 {
 	if  (gu8v_KeyRelease == KeyTx)
 	{
-		gu8v_TxDataHigh--;
-		gu8v_TxDataLow++;
 		fun_HijcakTx(gu8v_TxDataHigh,gu8v_TxDataLow);
 	}
 	gu8v_KeyRelease = 0;
@@ -96,8 +94,6 @@ NOTE	:
 ********************************************************************/
 void fun_KeyInit()
 {
-	// °´æI†¾ÐÑ
-	_pawu = KeyPortIO_Default;
 	KeyPortIO   = KeyPortIO_Default;
 	GCC_NOP();
 	GCC_NOP();
