@@ -27,14 +27,6 @@ void main()
 	//如果是上電復位，執行上電復位初始化，反之執行WDT溢出初始化
 	if (_to == 0 || _pdf ==0)
 	{
-		_pbc = 0x00;
-		_pb = 0x00;
-		_pbpu = 0xff;
-		GCC_CLRWDT();
-		GCC_CLRWDT();
-		_pbc = 0b00111000;
-		GCC_CLRWDT();
-
 		//上電復位初始化
 		fun_PowerOnInit();		// config SYS Clock,RAM,LVR,wdt,Timer,TimeBase
 		fun_KeyInit();

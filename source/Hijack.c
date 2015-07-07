@@ -93,6 +93,7 @@ void fun_HijackRx()
 		gbv_RxFirstEnter = 1;
 		gbv_RxSecondEnter =0;
 		lu8v_HijackRxCnt = 0;
+		lu8v_HijackRxParityCnt = 0;
 	}
 	else if (gbv_RxError)
 	{
@@ -105,6 +106,7 @@ void fun_HijackRx()
 		gbv_RxFirstEnter = 1;
 		gbv_RxSecondEnter =0;
 		lu8v_HijackRxCnt = 0;
+		lu8v_HijackRxParityCnt = 0;
 		_t3on = 0;
 	}
 }
@@ -174,6 +176,7 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
+						GCC_CLRWDT1();
 						gbv_RxError = 1;
 					}
 					break;
@@ -184,6 +187,7 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
+						GCC_CLRWDT2();
 						gbv_RxError = 1;
 					}
 					break;
@@ -234,7 +238,10 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
+						GCC_NOP();
+						gbv_RxError = 0;
 						gbv_RxError = 1;
+						lu8v_HijackRxParityCnt = 0;
 					}
 					break;
 				case Hijack_RX_StopBit:
@@ -244,6 +251,8 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
+						GCC_CLRWDT();
+						GCC_NOP();
 						gbv_RxError = 1;
 					}
 					break;
@@ -259,6 +268,8 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
+						GCC_CLRWDT();
+						GCC_CLRWDT1();
 						gbv_RxError = 1;
 					}
 					break;
