@@ -47,26 +47,20 @@ void fun_LCDUpdate(unsigned char DataHigh,unsigned char DataLow)
 	gu8v_temp0 = DataHigh & 0xf0;
 	GCC_SWAP(gu8v_temp0);
 	lu8v_LCD_Buffer[0] = lu8v_LCD_Tab1[gu8v_temp0];
-	gu8v_temp0 = DataHigh & 0xf0;
-	GCC_SWAP(gu8v_temp0);
 	lu8v_LCD_Buffer[1] = lu8v_LCD_Tab2[gu8v_temp0];
 
 	gu8v_temp0 = DataHigh & 0x0f;
 	lu8v_LCD_Buffer[2] = lu8v_LCD_Tab1[gu8v_temp0];
-	gu8v_temp0 = DataHigh & 0x0f;
 	lu8v_LCD_Buffer[3] = lu8v_LCD_Tab2[gu8v_temp0];
 
 	gu8v_temp0 = DataLow & 0xf0;
 	GCC_SWAP(gu8v_temp0);
 	lu8v_LCD_Buffer[4] = lu8v_LCD_Tab1[gu8v_temp0];
-	gu8v_temp0 = DataLow & 0xf0;
-	GCC_SWAP(gu8v_temp0);
 	lu8v_LCD_Buffer[5] = lu8v_LCD_Tab2[gu8v_temp0];
 
 	gu8v_temp0 = DataLow & 0x0f;
 	lu8v_LCD_Buffer[6] = lu8v_LCD_Tab1[gu8v_temp0];
-	gu8v_temp0 = DataLow & 0x0f;
-	lu8v_LCD_Buffer[9] = lu8v_LCD_Tab2[gu8v_temp0];
+	lu8v_LCD_Buffer[7] = lu8v_LCD_Tab2[gu8v_temp0];
 
 
 
