@@ -94,7 +94,8 @@ void fun_PrepareToHalt()
 	Hijack_Wakeup_W = 1;
 	//ÍPÈ] timer
 	_t0on = 0;
-
+	// ÍPÈ]LCDÔ@ æ
+	_lcden = 0;
 	// ÍPÈ] UART
 	_uarten = 0;
 	// ÍPÈ] SIM
@@ -116,6 +117,7 @@ void fun_WakeUpFromHalt()
 	// È_Ü¢÷–î‡
 	_emi = 1;
 	_tbon = 1;
+	_lcden = 1;
 // INTO
 	_integ &= 0b11111100;
 	_integ |= INT0_Defualt;

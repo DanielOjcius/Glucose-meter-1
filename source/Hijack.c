@@ -24,8 +24,6 @@ volatile unsigned char  lu8v_HijackRxCnt;		// Hijack接收狀態
 volatile unsigned char  lu8v_HijackRxParityCnt;	// Hijack接收狀態
 volatile unsigned char  gu8v_RxFisrtData;		// Hijack接收第一筆數據
 volatile unsigned char  gu8v_RxSecondData;		// Hijack接收第二筆數據
-volatile unsigned char  gu8v_Rxtemp0;
-volatile unsigned char  gu8v_Rxtemp1;
 
 volatile __16_type 		gu16_TimeCnt;			// Hijack 接收週期
 
@@ -44,7 +42,7 @@ void fun_HijackInit()
 	Hijack_Wakeup = 0;
 	Hijack_Wakeup_W = 1;
 	Hijack_ENVCC_IO = 0;
-	Hijack_ENVCC = 0;
+	Hijack_ENVCC = 1;
 	// for Hijack 接收
 	gbv_RxFirstEnter = 1;
 	gbv_RxSecondEnter = 0;
@@ -72,10 +70,12 @@ void fun_HijcakTx(unsigned char FisrtData,unsigned char SecondData)
 		lu8v_HijackTxState = Hijack_TX_Bias;
 		gu8v_TxFisrtData = FisrtData;
 		gu8v_TxSecondData = SecondData;
+		// gu8v_LCDHigh = gu8v_TxDataHigh;
+		// gu8v_LCDLow  = gu8v_TxDataLow;
+		fun_LCDUpdate(gu8v_TxDataHigh,gu8v_TxDataLow);
 		//演示用
 		gu8v_TxDataHigh--;
 		gu8v_TxDataLow++;
-		fun_LCDUpdate(gu8v_TxDataHigh,gu8v_TxDataLow);
 		// 開啟time 發送音頻信號
 		_t0on = 1;
 		_emi = 1;
@@ -86,24 +86,26 @@ void fun_HijackRx()
 	if (gbv_RxDataOk)
 	{
 		gbv_RxDataOk = 0;
+		// gu8v_LCDHigh = gu8v_RxFisrtData;
+		// gu8v_LCDLow  = gu8v_RxSecondData;
 		fun_LCDUpdate(gu8v_RxFisrtData,gu8v_RxSecondData);
 		//回復到初始接收狀態
 		gbv_RxFirstEnter = 1;
 		gbv_RxSecondEnter =0;
 		lu8v_HijackRxCnt = 0;
-		gu8v_Rxtemp0=0;
 	}
 	else if (gbv_RxError)
 	{
 		gbv_RxError = 0;
-		// TODO 更新ERROR到LCD
-
+		//  更新ERROR到LCD
+		// gu8v_LCDHigh = 0xee;
+		// gu8v_LCDLow  = 0xee;
+		fun_LCDUpdate(0xEE,0xEE);
 		// 回復到初始接收狀態
 		gbv_RxFirstEnter = 1;
 		gbv_RxSecondEnter =0;
 		lu8v_HijackRxCnt = 0;
 		_t3on = 0;
-		gu8v_Rxtemp0=0;
 	}
 }
 /********************************************************************
@@ -120,7 +122,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 	_t3on = 1;
 	if (gbv_RxSecondEnter)
 	{
-		gu8v_Rxtemp0++;
 		if ((gu16_TimeCnt.u16 < hijack_Period0_Max) &&(gu16_TimeCnt.u16 > hijack_Period0_Min))
 		{
 			gbv_RxBitHigh = 0;

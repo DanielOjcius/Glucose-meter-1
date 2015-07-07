@@ -20,6 +20,8 @@ extern volatile unsigned char WorkModeState;		// MCU工作模式狀態標誌位
 extern volatile unsigned char gu8v_TxDataHigh;
 extern volatile unsigned char gu8v_TxDataLow;
 extern volatile unsigned int  gu16v_Temp;
+extern volatile unsigned char  gu8v_temp0;
+extern volatile unsigned char  gu8v_temp1;
 extern volatile __byte_type 	gu8v_FlagMain; 			// Bit標誌位
 #define gbv_7_8ms				gu8v_FlagMain.bits.b0 		// 按鍵長按標誌位
 

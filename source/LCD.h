@@ -16,6 +16,9 @@
 #ifndef LCD_H
 #define LCD_H
 
+
+extern volatile unsigned char 	gu8v_LCDHigh;
+extern volatile unsigned char 	gu8v_LCDLow;
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ¹«¹²º¯”µ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 void fun_LCDInit();
 void fun_LCDUpdate(unsigned char DataHigh,unsigned char DataLow);

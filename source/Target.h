@@ -311,7 +311,7 @@
 // BIT 0  PGFS0:PG0
 // 			0:  I/O
 //			1:  SEG24
-#define PGFS_Default	0b00000000
+#define PGFS_Default	0b00000011
 //                           @--------------PHFS for HT45F66/HT45F67---------------@
 //  ______________________________________________________________________________
 // | Bit  |  Bit7  |  Bit6  |  Bit5  |  Bit4  |  Bit3  |  Bit2  |  Bit1  |  Bit0  |

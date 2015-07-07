@@ -19,6 +19,8 @@ volatile unsigned char gu8v_HaltTime;		// MCU休眠時間計時
 volatile unsigned char gu8v_TxDataHigh;
 volatile unsigned char gu8v_TxDataLow;
 volatile unsigned int  gu16v_Temp;
+volatile unsigned char  gu8v_temp0;
+volatile unsigned char  gu8v_temp1;
 void main()
 {
 	//判斷是否為上電復位或者非正常情況下的復位
@@ -64,12 +66,12 @@ void main()
 		if (gbv_7_8ms == 1)
 		{
 			gbv_7_8ms = 0;
-//			fun_JackCheck();
+			fun_JackCheck();
 			fun_KeyScan();
 			fun_KeyTask();
 			// 用戶的其他任務
 			// ---------
-//			fun_HijcakTx(gu8v_TxDataHigh,gu8v_TxDataLow);
+//			fun_HijcakTx(gu8v_LCDHigh,gu8v_LCDLow);
 		}
 		//輪詢各個工作模式
 		switch (WorkModeState)
