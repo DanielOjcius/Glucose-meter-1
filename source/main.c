@@ -63,7 +63,7 @@ void main()
 			fun_KeyTask();
 			// 用戶的其他任務
 			// ---------
-//			fun_HijcakTx(gu8v_LCDHigh,gu8v_LCDLow);
+
 		}
 		//輪詢各個工作模式
 		switch (WorkModeState)

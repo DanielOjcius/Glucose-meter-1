@@ -3,10 +3,10 @@
 //  Copyright : 2015 BY HOLTEK SEMICONDUCTOR INC
 //  File Name : KeyScan.h
 // Description: ∞¥ÊIíﬂ√Ë≥Ã–Ú
-//Targer Board: HT45F75 BodyFat-ESK00
-//   MCU      : HT45F75/HT45F77
+//Targer Board: 
+//   MCU      : HT45F6x
 //   Author   : ChenTing
-//   Date     : 2015/05/28
+//   Date     : 2015/06/30
 //   Version  : V00
 //   History  :
 //___________________________________________________________________

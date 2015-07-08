@@ -2,7 +2,7 @@
 //___________________________________________________________________
 //  Copyright : 2015 BY HOLTEK SEMICONDUCTOR INC
 //  File Name : Voice.c
-// Description: ’Z“Ù≤•∑≈œ‡ÍP∫Øîµ
+// Description: ’Z“Ù≥Ã–Ú
 //Targer Board:
 //   MCU      : HT45F6x
 //   Author   : ChenTing

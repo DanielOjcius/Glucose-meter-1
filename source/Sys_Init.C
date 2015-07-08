@@ -3,10 +3,10 @@
 //  Copyright : 2015 BY HOLTEK SEMICONDUCTOR INC
 //  File Name : sys_init.c
 // Description: 系統初始化相關程序
-//Targer Board: HT45F75 BodyFat-ESK00
-//   MCU      : HT45F75
+//Targer Board: 
+//   MCU      : HT45F6x
 //   Author   : ChenTing
-//   Date     : 2015/05/26
+//   Date     : 2015/06/29
 //___________________________________________________________________
 //___________________________________________________________________
 #include "common.h"

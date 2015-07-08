@@ -18,25 +18,25 @@ void fun_HijackRx();
 void fun_HijackInit();
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 變量聲明 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 extern volatile __byte_type 	gu8v_FlagTx; 			// Bit標誌位
-#define gbv_TxBitHigh			gu8v_FlagTx.bits.b0 		// 按鍵長按標誌位
-#define gbv_TxFirstEnter		gu8v_FlagTx.bits.b1			// 第一次進入Timer標誌位
-#define gbv_TxSecondEnter		gu8v_FlagTx.bits.b2			// 第二次進入Timer標誌位
+#define gbv_TxBitHigh			gu8v_FlagTx.bits.b0 		// 發送high標誌位
+#define gbv_TxFirstEnter		gu8v_FlagTx.bits.b1			// 第一次進入Timer發送程序
+#define gbv_TxSecondEnter		gu8v_FlagTx.bits.b2			// 第二次進入Timer發送程序
 #define gbv_TxThirdEnter		gu8v_FlagTx.bits.b3  		// 第三次進入Timer標誌位
 #define gbv_TxFourthEnter		gu8v_FlagTx.bits.b4			// 第四次進入Timer標誌位
 #define gbv_TxDataOk			gu8v_FlagTx.bits.b5 		// Hijack發送完成標誌位
-#define gbv_Txbuf				gu8v_FlagTx.bits.b6			// 顯示發送值
-#define gbv_Rxbuf				gu8v_FlagTx.bits.b7			// 顯示接收值
+// #define gbv_Txbuf				gu8v_FlagTx.bits.b6			// 顯示發送值
+// #define gbv_Rxbuf				gu8v_FlagTx.bits.b7			// 顯示接收值
 
 
 extern volatile __byte_type 	gu8v_FlagRx;				// Bit標誌位
-#define gbv_RxFirstBit		gu8v_FlagRx.bits.b0 		// Hijack接收到一個bit
+// #define gbv_RxFirstBit			gu8v_FlagRx.bits.b0 		// Hijack接收到一個bit
 #define gbv_RxDealBitOk			gu8v_FlagRx.bits.b1 		// Hijack接收到一個bit
 #define gbv_RxFirstEnter		gu8v_FlagRx.bits.b2			// 第一次進入Timer標誌位
 #define gbv_RxSecondEnter		gu8v_FlagRx.bits.b3			// 第二次進入Timer標誌位
-#define gbv_RxThirdEnter		gu8v_FlagRx.bits.b4  		// 第三次進入Timer標誌位
-#define gbv_RxBitHigh			gu8v_FlagRx.bits.b5 		// 按鍵長按標誌位
-#define gbv_RxError				gu8v_FlagRx.bits.b6 		// 按鍵長按標誌位
-#define gbv_RxDataOk			gu8v_FlagRx.bits.b7 		// 按鍵長按標誌位
+// #define gbv_RxThirdEnter		gu8v_FlagRx.bits.b4  		// 第三次進入Timer標誌位
+#define gbv_RxBitHigh			gu8v_FlagRx.bits.b5 		// 接收到一個高位標誌位
+#define gbv_RxError				gu8v_FlagRx.bits.b6 		// 接收錯誤標誌位
+#define gbv_RxDataOk			gu8v_FlagRx.bits.b7 		// 接收成功標誌位
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 預定義  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #define Hijack_TX_Bias				1

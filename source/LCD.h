@@ -45,6 +45,6 @@ void fun_LCDUpdate(unsigned char DataHigh,unsigned char DataLow);
 // 			0:  除能
 //			1:  使能
 //	在正常,低速和空閒模式下,LCD的開/關可通過此位控制,休眠模式LCD一直關閉
-#define LCDC_Default 0x11
+#define LCDC_Default 0x01
 
 #endif

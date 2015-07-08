@@ -2,9 +2,9 @@
 //___________________________________________________________________
 //  Copyright : 2015 BY HOLTEK SEMICONDUCTOR INC
 //  File Name : HT45F75Config.c
-// Description: HT45F75暫存器快速設定
-//Targer Board: HT45F75 BodyFat-ESK00
-//   MCU      : HT45F75
+// Description: HT45F6x
+//Targer Board: 
+//   MCU      : HT45F6x
 //   Author   : ChenTing
 //   Date     : 2015/05/26
 //   Version  : V00
@@ -22,14 +22,9 @@ extern volatile unsigned char gu8v_TxDataLow;
 extern volatile unsigned int  gu16v_Temp;
 extern volatile unsigned char  gu8v_temp0;
 extern volatile unsigned char  gu8v_temp1;
-extern volatile __byte_type 	gu8v_FlagMain; 			// Bit標誌位
-#define gbv_7_8ms				gu8v_FlagMain.bits.b0 		// 按鍵長按標誌位
+extern volatile __byte_type 	gu8v_FlagMain; 				// Bit標誌位
+#define gbv_7_8ms				gu8v_FlagMain.bits.b0 		// 7.8ms定時標誌位
 
-//#define gbv_TxFirstEnter		gu8v_Flag2.bits.b1		// 第一次進入Timer標誌位
-//#define gbv_TxSecondEnter		gu8v_Flag2.bits.b2		// 第二次進入Timer標誌位
-//#define gbv_TxThirdEnter		gu8v_Flag2.bits.b3  	// 第三次進入Timer標誌位
-//#define gbv_TxFourthEnter		gu8v_Flag2.bits.b4		// 第四次進入Timer標誌位
-//#define gbv_TxDataOk			gu8v_Flag2.bits.b5 		// Hijack發送完成標誌位
 
 
 #define STRIPSCHECKMODE			1

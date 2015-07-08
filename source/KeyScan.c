@@ -3,8 +3,8 @@
 //  Copyright : 2015 BY HOLTEK SEMICONDUCTOR INC
 //  File Name : KeyScan.c
 // Description: 按鍵掃描程序
-//Targer Board: HT45F75 BodyFat-ESK00
-//   MCU      : HT45F75/HT45F77
+//Targer Board: None
+//   MCU      : HT45F6x
 //   Author   : ChenTing
 //   Date     : 2015/05/28
 //   Version  : V00
@@ -101,6 +101,12 @@ void fun_KeyInit()
 	gu8v_KeyLast = gu8v_KeyNow;
 	gbv_KeyPress = 0;
 }
+/********************************************************************
+Function: 檢測耳機口是否拔出
+INPUT	:
+OUTPUT	:
+NOTE	:
+********************************************************************/
 void fun_JackCheck()
 {
 	Hijack_Wakeup_IO = 1;

@@ -4,9 +4,9 @@
 //  File Name : Readme.h
 // Description: user ×Ô¶¨Áx…¢”µÔO¶¨
 //Targer Board:
-//   MCU      : HT45F75/HT45F77
+//   MCU      : HT45F6x
 //   Author   : ChenTing
-//   Date     : 2015/06/26
+//   Date     : 2015/06/29
 //___________________________________________________________________
 //___________________________________________________________________
 #ifndef _USERDEFINE_H_

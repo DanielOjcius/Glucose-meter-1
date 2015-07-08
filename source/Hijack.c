@@ -46,7 +46,6 @@ void fun_HijackInit()
 	// for Hijack 接收
 	gbv_RxFirstEnter = 1;
 	gbv_RxSecondEnter = 0;
-	gbv_RxThirdEnter=0;
 	Hijack_RX_IO = 1;
 	Hijack_RX 	 = 0;
 	_integ &= 0b11111100;
@@ -70,10 +69,8 @@ void fun_HijcakTx(unsigned char FisrtData,unsigned char SecondData)
 		lu8v_HijackTxState = Hijack_TX_Bias;
 		gu8v_TxFisrtData = FisrtData;
 		gu8v_TxSecondData = SecondData;
-		// gu8v_LCDHigh = gu8v_TxDataHigh;
-		// gu8v_LCDLow  = gu8v_TxDataLow;
 		fun_LCDUpdate(gu8v_TxDataHigh,gu8v_TxDataLow);
-		//演示用
+		//演示用 低位自加1,高位自減1
 		gu8v_TxDataHigh--;
 		gu8v_TxDataLow++;
 		// 開啟time 發送音頻信號
@@ -86,8 +83,6 @@ void fun_HijackRx()
 	if (gbv_RxDataOk)
 	{
 		gbv_RxDataOk = 0;
-		// gu8v_LCDHigh = gu8v_RxFisrtData;
-		// gu8v_LCDLow  = gu8v_RxSecondData;
 		fun_LCDUpdate(gu8v_RxFisrtData,gu8v_RxSecondData);
 		//回復到初始接收狀態
 		gbv_RxFirstEnter = 1;
@@ -99,8 +94,6 @@ void fun_HijackRx()
 	{
 		gbv_RxError = 0;
 		//  更新ERROR到LCD
-		// gu8v_LCDHigh = 0xee;
-		// gu8v_LCDLow  = 0xee;
 		fun_LCDUpdate(0xEE,0xEE);
 		// 回復到初始接收狀態
 		gbv_RxFirstEnter = 1;
@@ -121,7 +114,7 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 	gu16_TimeCnt.byte.byte1 = _tm3dh;
 	gu16_TimeCnt.byte.byte0 = _tm3dl;
 	_t3on = 0;
-	_t3on = 1;
+	_t3on = 1;	//重新開始計時
 	if (gbv_RxSecondEnter)
 	{
 		if ((gu16_TimeCnt.u16 < hijack_Period0_Max) &&(gu16_TimeCnt.u16 > hijack_Period0_Min))
@@ -154,7 +147,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 						if (lu8v_HijackRxCnt > 12)
 						{
 							// 由於手機BIAS只發送了12bit，若超過12bit則為錯誤
-							GCC_CLRWDT();
 							gbv_RxError = 1;
 						}
 					}
@@ -176,7 +168,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
-						GCC_CLRWDT1();
 						gbv_RxError = 1;
 					}
 					break;
@@ -187,7 +178,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
-						GCC_CLRWDT2();
 						gbv_RxError = 1;
 					}
 					break;
@@ -238,7 +228,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
-						GCC_NOP();
 						gbv_RxError = 0;
 						gbv_RxError = 1;
 						lu8v_HijackRxParityCnt = 0;
@@ -251,8 +240,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
-						GCC_CLRWDT();
-						GCC_NOP();
 						gbv_RxError = 1;
 					}
 					break;
@@ -268,8 +255,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 					}
 					else
 					{
-						GCC_CLRWDT();
-						GCC_CLRWDT1();
 						gbv_RxError = 1;
 					}
 					break;
@@ -282,8 +267,6 @@ DEFINE_ISR(INT0_ISR, INT0_VECTOR)
 	{
 		gbv_RxFirstEnter = 0;
 		gbv_RxSecondEnter= 1;
-		// 第一個bit由於不同手機可能會有特殊音效處理時間不准不做判斷
-		gbv_RxFirstBit = 1;
 		lu8v_HijackRxState = Hijack_RX_Bias;
 	}
 
@@ -297,7 +280,6 @@ NOTE	: Hijack 發送數據
 ********************************************************************/
 DEFINE_ISR(Timer0A_ISR, Timer0A_VECTOR)
 {
-	GCC_CLRWDT();
 	if (gbv_TxFirstEnter)
 	{
 		Hijack_TX = 1;

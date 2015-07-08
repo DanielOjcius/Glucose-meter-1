@@ -14,7 +14,7 @@
 volatile unsigned char 	gu8v_LCDHigh;
 volatile unsigned char 	gu8v_LCDLow;
 
-volatile static unsigned char lu8v_LCD_Buffer[10] __attribute__ ((at(0x190)));
+volatile static unsigned char lu8v_LCD_Buffer[8] __attribute__ ((at(0x190)));
 const unsigned char lu8v_LCD_Tab1[18] =
  {0x07,0x00,0x05,0x01,0x02,0x03,0x07,0x01,0x07,0x03,0x07,0x06,0x07,0x04,0x07,0x07}; //0~9~ A ~ F
 const unsigned char lu8v_LCD_Tab2[18] =
@@ -27,11 +27,9 @@ NOTE	:
 ********************************************************************/
 void fun_LCDInit()
 {
-	_type = 0;
-	_lcden = 1;
-	// _lcdc = LCDC_Default;
+	_lcdc = LCDC_Default;
 	unsigned char lu8v_lcdcount;
-	for (lu8v_lcdcount = 0; lu8v_lcdcount < 10; lu8v_lcdcount++)
+	for (lu8v_lcdcount = 0; lu8v_lcdcount < 8; lu8v_lcdcount++)
 	{
 		lu8v_LCD_Buffer[lu8v_lcdcount] = 0XFF;
 	}
@@ -61,19 +59,4 @@ void fun_LCDUpdate(unsigned char DataHigh,unsigned char DataLow)
 	gu8v_temp0 = DataLow & 0x0f;
 	lu8v_LCD_Buffer[6] = lu8v_LCD_Tab1[gu8v_temp0];
 	lu8v_LCD_Buffer[7] = lu8v_LCD_Tab2[gu8v_temp0];
-
-
-
-
-	// lu8v_LCD_Buffer[0] = lu8v_LCD_Tab1[(DataHigh&0xf0)>>4];
-	// lu8v_LCD_Buffer[1] = lu8v_LCD_Tab2[(DataHigh&0xf0)>>4];
-
-	// lu8v_LCD_Buffer[2] = lu8v_LCD_Tab1[(DataHigh&0x0f)];
-	// lu8v_LCD_Buffer[3] = lu8v_LCD_Tab2[(DataHigh&0x0f)];
-
-	// lu8v_LCD_Buffer[4] = lu8v_LCD_Tab1[(DataLow&0xf0)>>4];
-	// lu8v_LCD_Buffer[5] = lu8v_LCD_Tab2[(DataLow&0xf0)>>4];
-
-	// lu8v_LCD_Buffer[6] = lu8v_LCD_Tab1[(DataLow&0x0f)];
-	// lu8v_LCD_Buffer[8] = lu8v_LCD_Tab2[(DataLow&0x0f)];
 }
